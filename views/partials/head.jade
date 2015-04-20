@@ -1,0 +1,26 @@
+head
+  title 4front Portal
+  base(href='/portal')
+  link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/favicons/apple-touch-icon-114x114-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='120x120', href='/favicons/apple-touch-icon-120x120-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/favicons/apple-touch-icon-144x144-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='152x152', href='/favicons/apple-touch-icon-152x152-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='60x60', href='/favicons/apple-touch-icon-60x60-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/favicons/apple-touch-icon-72x72-precomposed.png')
+  link(rel='apple-touch-icon-precomposed', sizes='76x76', href='/favicons/apple-touch-icon-76x76-precomposed.png')
+  link(rel='icon', type='image/png', sizes='64x64', href='/favicons/favicon.png')
+  
+  //- // Consolidated stylesheet for release and individual files in debug
+  link(data-aero-build='release', rel='stylesheet', href='css/components.min.css')
+  link(data-aero-build='release', rel='stylesheet', href='css/app.min.css')
+  link(data-aero-build='debug', rel='stylesheet', href='/node_modules/bootstrap/dist/css/bootstrap.css')
+  link(data-aero-build='debug', rel='stylesheet', href='/node_modules/font-awesome/css/font-awesome.css')
+  link(data-aero-build='debug', rel='stylesheet', href='/css/styles.styl.css')
+  link(data-aero-build='debug', rel='stylesheet', href='/css/versions.styl.css')
+
+  //- link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Dosis:100,200,300,400,500")
+
+  style.
+    [ng-cloak] {
+      display: none
+    }

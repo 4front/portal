@@ -2,6 +2,7 @@ var express = require('express');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var helmet = require('helmet');
+var _ = require('lodash');
 
 module.exports = function(req, res, next) {
 
@@ -29,10 +30,13 @@ module.exports = function(req, res, next) {
       return res.render('login');
     }
 
-    if (jwt.expires < Date.now())
+    if (jwt.expires < Date.now()) {
+      req.session.destroy();
       return res.render('login');
+    }
 
-
+    req.jwt = jwt;
+    next();
   });
 
   portal.post('/login', function(req, res, next) {
@@ -79,4 +83,5 @@ module.exports = function(req, res, next) {
 
   portal.use(express.static('js'));
   portal.use(express.static('css'));
+  portal.use(express.static('node_modules'));
 }

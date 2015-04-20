@@ -1,0 +1,33 @@
+doctype html
+html
+  include partials/head
+  
+  body.login
+    div.container
+      .row
+        .col-md-3
+        .col-md-3
+          img(src="https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png")
+          h2 Pure and Simple Financial Concepts
+          div.administrator-logo
+            img(custom-content-src="logo.png", administrator="{{vm.administrator.code}}")
+            span Brought to you by {{vm.administrator.name}}
+
+          .alert.alert-danger.ng-cloak(ng-show="vm.error", ng-cloak, style="margin-top:20px") {{vm.error}}
+          form(role="form", novalidate)
+            .form-group
+              label.sr-only(for='username') Username
+              input.form-control(type='email', autocapitalize="none", name="username", placeholder='Username', autofocus)
+
+            .form-group
+              label.sr-only(for='password') Password
+              input.form-control(name="password", autocapitalize="none", type='password', placeholder='Password')
+
+            .checkbox
+              label
+                input(type="checkbox") Remember me on this device
+
+
+            .form-group
+              button.btn.btn-primary.btn-block(type="submit") Sign-In
+        .col-md-3
