@@ -11,11 +11,16 @@ head
   link(rel='icon', type='image/png', sizes='64x64', href='/favicons/favicon.png')
   
   //- // Consolidated stylesheet for release and individual files in debug
+  //- link(data-aero-build='release', rel='stylesheet', href='css/components.min.css')
+  //- link(data-aero-build='release', rel='stylesheet', href='css/app.min.css')
   link(data-aero-build='debug', rel='stylesheet', href='/node_modules/bootstrap/dist/css/bootstrap.css')
   link(data-aero-build='debug', rel='stylesheet', href='/node_modules/font-awesome/css/font-awesome.css')
-  link(data-aero-build='debug', rel='stylesheet', href='/css/app.css')
-
-  //- link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Dosis:100,200,300,400,500")
+  link(data-aero-build='debug', rel='stylesheet', href='/css/styles.styl.css')
+  link(data-aero-build='debug', rel='stylesheet', href='/css/versions.styl.css')
+  
+  //- Allow a customStylesheet to be provided
+  if customStylesheetUrl
+    link(rel="stylesheet", href="#{customStylesheetUrl}")
 
   style.
     [ng-cloak] {
