@@ -1,0 +1,278 @@
+div(ng-cloak)
+  .alert.alert-danger(ng-show="error", ng-switch="error")
+    span(ng-switch-when="invalidAppName") The app name is not valid
+    span(ng-switch-when="appNameUnavailable") The app name is not available
+    span(ng-switch-when="customDomainNotAvailable") The custom domain is already taken
+    span(ng-switch-when="unknownError") Unknown error saving application settings
+
+  form.form-horizontal(role="form", style="margin-top: 25px")
+    h4 Basic Settings
+    .well
+      .form-group
+        label.col-sm-2.control-label(for="name") Name
+        .col-sm-6
+          input.form-control(type="text", name="name", ng-model="tempApplication.name")
+          .help-block http://{{tempApplication.name}}.{{config.virtualHost}}
+        .col-sm-4
+          .help-block <strong>Required</strong> - The name of your application. Can only consist of lowercase letters, numbers, and dashes.
+
+      .form-group(ng-show="organization")
+        label.col-sm-2.control-label Organization
+        .col-sm-6
+          input.form-control(readonly, ng-value="organization.name")
+        .col-sm-2
+
+      .form-group
+        label.col-sm-2.control-label(for="domain") Custom Domains
+        .col-sm-6
+          ul.list-group
+            li.list-group-item(ng-repeat="domain in tempApplication.domains")
+              button.btn.btn-default.btn-sm.push-right(style="float:right; margin-top:-5px", ng-click="removeDomain(domain)")
+                i.fa.fa-times
+              span {{domain}}
+
+          button.btn.btn-default.btn-sm(ng-click="openNewDomainModal()") Add Domain
+
+        .col-sm-4
+          .help-block Use a custom domain. Register a CNAME with your domain registrar pointing to {{tempApplication.name}}.{{config.virtualHost}}.
+
+    h4#securitySection Security
+    .well
+      .alert.alert-danger(ng-show="authError", ng-switch="authError")
+        span(ng-switch-when="noAuthTypeSelected") No authization type selected
+        span(ng-switch-when="noAuthProviderSelected") No OAuth provider selected
+        span(ng-switch-when="invalidOAuthClientId") Invalid OAuth Client ID
+        span(ng-switch-when="invalidOAuthClientSecret") Invalid OAuth Client Secret
+        span(ng-switch-when="missingGoogleScopes") Enter at least one Google OAuth scope
+        span(ng-switch-when="invalidGoogleCustomDomain") Custom domain is not valid
+
+      .form-group
+        label.col-sm-2.control-label(for="authType") Authentication
+        .col-sm-6
+          label.radio-inline
+            input(type="radio", value="public", name="authType", ng-model="tempApplication.authConfig.type")
+            span Public
+          //- label.radio-inline
+          //-   input(type="radio", value="basicAuth", name="authType", ng-model="tempApplication.authConfig.type")
+          //-   span Basic Auth
+          label.radio-inline
+            input(type="radio", value="oauth", name="authType", ng-model="tempApplication.authConfig.type")
+            span OAuth
+          //- For now only show the Parse option if it is already set.
+          label.radio-inline(ng-show="organization.name=='Aerobatic'")
+            input(type="radio", value="parse", name="authType", ng-model="tempApplication.authConfig.type")
+            span Parse
+        .col-sm-4
+          .help-block Choose how you want to authorize access to your application. By default anybody on the internet is granted access.
+
+      .form-group(ng-show="tempApplication.authConfig.type=='oauth'")
+        label.col-sm-2.control-label(for="oAuthProvider") OAuth Provider
+        .col-sm-6
+          select.form-control(ng-options="provider as provider.label for provider in oAuthProviders", ng-model="tempApplication.authConfig.oAuthProvider")
+        .col-sm-4
+          a.btn.btn-default.btn-icon-rt(ng-show="tempApplication.authConfig.oAuthProvider", target="_blank", ng-href="{{tempApplication.authConfig.oAuthProvider.registerUrl}}")
+            span Register App with {{tempApplication.authConfig.oAuthProvider.label}}
+            i.fa.fa-external-link
+
+      div(ng-show="tempApplication.authConfig.type =='oauth'")
+        .form-group
+          .col-sm-2
+          .col-sm-6
+            label.radio-inline
+              input(type="radio", value="prod", name="oauthEnv", ng-model="selectedOAuthEnv")
+              span Production
+            label.radio-inline
+              input(type="radio", value="dev", name="oauthEnv", ng-model="selectedOAuthEnv")
+              span Development
+          .col-sm-4
+            a.help-inline(href="http://4front.io/docs/middleware/oauth.html", target="_blank") See OAuth documentation
+
+        div(ng-hide="selectedOAuthEnv=='dev'")
+          .form-group
+            label.control-label.col-sm-2(for="oAuthClientId") Client ID
+            .col-sm-6
+              input.form-control(type="text", name="oAuthClientId", ng-model="tempApplication.authConfig.oAuthClientId")
+            .col-sm-4
+
+          .form-group
+            label.control-label.col-sm-2(for="oAuthClientSecret") Client Secret
+            .col-sm-6
+              input.form-control(type="text", name="oAuthClientSecret", ng-model="tempApplication.authConfig.oAuthClientSecret")
+            .col-sm-4
+
+        div(ng-show="selectedOAuthEnv=='dev'")
+          .form-group
+            label.control-label.col-sm-2(for="oAuthDevClientId") Client ID
+            .col-sm-6
+              input.form-control(type="text", name="oAuthDevClientId", ng-model="tempApplication.authConfig.oAuthDevClientId")
+            .col-sm-4
+
+          .form-group
+            label.control-label.col-sm-2(for="oAuthDevClientSecret") Client Secret
+            .col-sm-6
+              input.form-control(type="text", name="oAuthDevClientSecret", ng-model="tempApplication.authConfig.oAuthDevClientSecret")
+            .col-sm-4
+
+      div(ng-show="tempApplication.authConfig.type =='oauth' && tempApplication.authConfig.oAuthProvider.value == 'google'")
+        .form-group
+          label.col-sm-2.control-label(for="googleScopes") Scopes
+          .col-sm-6
+            textarea.form-control(style="resize:none; height:100px", name="googleScopes", ng-model="tempApplication.authConfig.googleScopes")
+            p.help-inline
+              a(href="https://developers.google.com/gdata/faq#AuthScopes" target="_blank") Google scope reference
+              i.fa.fa-external-link(style="margin-left:6px;")
+
+          .col-sm-4
+            .help-block List of <a href="https://developers.google.com/accounts/docs/OAuth2Login#scope-param" target="_blank">Google OAuth2 scopes</a> specifying which APIs the authenticated user can invoke. Enter one value per line. Must at a minimum include a <a href="https://developers.google.com/+/api/oauth#profile">profile</a> scope.
+
+        .form-group
+          label.col-sm-2.control-label(for="googleHostedDomain") Hosted Domain
+          .col-sm-6
+            input.form-control(type="text", ng-model="tempApplication.authConfig.googleHostedDomain", placeholder="yourdomain.com")
+          .col-sm-4
+            p.help-block If you have a hosted <a href="https://www.google.com/work/apps/business/" target="_blank">Google Apps for Work</a> domain, you can restrict access to the app to only users whose email is associated with that domain, i.e. someone@yourcompany.com.
+
+      div(ng-show="tempApplication.authConfig.type=='parse'")
+        .form-group
+          label.col-sm-2.control-label(for="parseAppId") Application ID
+          .col-sm-6
+            input.form-control(type="text", ng-model="tempApplication.authConfig.parseAppId", placeholder="Parse Application ID")
+          .col-sm-4
+            p.help-block Your Parse Application ID 
+
+        .form-group
+          label.col-sm-2.control-label(for="parseMasterKey") Master Key
+          .col-sm-6
+            input.form-control(type="text", ng-model="tempApplication.authConfig.parseMasterKey", placeholder="Parse Master Key")
+          .col-sm-4
+            p.help-block Your Parse Master Key
+
+      .form-group
+        label.col-sm-2.control-label(for="requireSsl") SSL
+        .col-sm-6
+          label.checkbox-inline
+            input(type="checkbox", ng-model="tempApplication.requireSsl")
+            span Require https
+        .col-sm-4
+          .help-block Standard http requests to your app will be redirected to https.
+
+    //- Only available for paid organization apps
+    div(ng-show="application.orgId")
+      h4 Traffic Control
+      .well
+        .form-group
+          label.col-sm-2.control-label(for="snapshots") Traffic Control
+          .col-sm-6
+            label.checkbox-inline
+              input(type="checkbox", ng-model="tempApplication.trafficControlEnabled")
+              span Enable Traffic Control
+          .col-sm-4
+            .help-block Traffic control allows you to direct percentages of traffic to multiple versions of your app at once. This can be used both for A/B testing as well as soft launches to a subset of users. <a href="http://4front.io/docs/traffic-control" target="_blank">Learn More</a>
+
+      h4 SEO
+      .well
+        .form-group
+          label.col-sm-2.control-label(for="snapshots") Snapshot Service
+          .col-sm-6
+            label.checkbox-inline
+              input(type="checkbox", ng-model="tempApplication.snapshotsEnabled")
+              span Enable static snapshots
+          .col-sm-4
+            .help-block Aerobatic will crawl your site once a week with a headless browser. The complete HTML of the page including data loaded via AJAX is saved off as a static file that is automatically served to search bots. Your site must use HTML5 pushState navigation. <a href="http://www.aerobatic.com/docs/seo" target="_blank">Learn More</a>
+
+    h4 Environment Variables
+    table.table.table-condensed.table-bordered
+      thead
+        th Property Name
+        th Property Value
+        th Server-Only
+        th
+      tbody
+        tr(ng-repeat="setting in tempApplication.configSettings")
+          td
+            input.form-control(type="text", ng-model="setting.key")
+          td
+            input.form-control(type="text", ng-model="setting.value")
+          td
+            input(type="checkbox", ng-model="setting.serverOnly")
+          td
+            button.btn.btn-default.btn-icon-left(ng-click="deleteSetting(setting)")
+              i.fa.fa-times
+              span Delete
+        tr
+          td
+            input.form-control(type="text", ng-model="newSetting.key")
+          td
+            input.form-control(type="text", ng-model="newSetting.value")
+          td
+            input(type="checkbox", ng-model="newSetting.serverOnly")
+          td
+            button.btn.btn-default.btn-icon-left(type="button", ng-click="addSetting(newSetting)", ng-disabled="addSettingDisabled()")
+              i.fa.fa-plus
+              span Add
+
+    .row
+      .col-md-12
+        span.pull-right
+          a.btn.btn-default.btn-left(ng-href="/apps/{{application.appId}}") Cancel
+          button.btn.btn-primary.create(type="button", ng-click="saveApplication()", ng-disabled="appSaving")
+            span(ng-hide="appSaving") Update App
+            span(ng-show="appSaving") <i class="fa fa-cog fa-spin fa-lg"></i> Updating
+
+
+  div(ng-show="isAdministrator && allowTransfers")
+    h4 Transfer App
+    .well
+      .row
+        .col-md-8
+          p.help-inline Transfer this app to another organization that you are a member of.
+        .col-md-4.pull-right
+          button.btn.btn-danger(ng-click="confirmTransfer()", style="width:150px") Transfer App
+
+  div(ng-show="isAdministrator")
+    h4 Delete Application
+    .well
+      .row
+        .col-md-8
+          div Deleting applications is permanant. Make sure this is what you intend.
+        .col-md-4.pull-right
+          button.btn.btn-danger(ng-click="confirmDelete()", style="width:150px") Delete App
+
+script#deleteAppModal(type="text/ng-template")
+  .modal-body
+    .alert.alert-danger
+      h4 Are You Sure?
+
+    p Deleting an application is permanant and will result in 404 errors when users visit your site. If you are sure you wish to proceed, type <b>{{application.name}}</b> in the box below.
+    input.form-control(type="text", ng-model="confirmDeleteName")
+
+  .modal-footer
+    button.btn.btn-default(ng-click="deleteAppModal.close('dismiss')") Cancel
+    button.btn.btn-danger.delete-btn.btn-icon-left(type="button", ng-click="deleteApplication()", ng-disabled="confirmDeleteName != application.name || deleting")
+      span(ng-show="deleting")
+        i.fa.fa-cog.fa-spin.fa-lg
+        span Deleting
+      span(ng-hide="deleting") I Understand, Delete App
+
+script#transferAppModal(type="text/ng-template")
+  .modal-body
+    h4 Transfer App
+    select.form-control(ng-options="org as org.name for org in organizations", ng-model="transferToOrg")
+
+  .modal-footer
+    button.btn.btn-default(ng-click="$dismiss('cancel')") Cancel
+    button.btn.btn-danger.btn-icon-left(type="button", ng-click="transferApp(transferToOrg)" ng-disabled="!transferToOrg || transferring")
+      span(ng-show="transferring")
+        i.fa.fa-cog.fa-spin.fa-lg
+        span Transferring
+      span(ng-hide="transferring") Transfer
+
+script#newDomainModal(type="text/ng-template")
+  .modal-body
+    h4 New Custom Domain
+    p.help-block Register a CNAME with your domain registrar pointing to {{tempApplication.name}}.aerobaticapp.com.
+    input.form-control(type="text", name="newDomain", ng-model="$parent.newDomain")
+
+  .modal-footer
+    button.btn.btn-default(ng-click="$dismiss()") Cancel
+    button.btn.btn-primary.btn-icon-left(type="button", ng-click="addDomain()") Add

@@ -1,1 +1,1 @@
-module.exports = "./lib/portal.js";
+module.exports = require("./lib/portal");

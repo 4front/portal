@@ -1,0 +1,183 @@
+p.load-spinner(ng-show="appLoading")
+  i.fa.fa-spinner.fa-spin.fa-3x
+  span.h3 Loading
+
+tabset.tabset(style="margin-top: 25px", ng-hide="appLoading")
+  tab(heading="Deployments")
+    div(ng-hide="versions.length")
+      .well
+        h4 No Versions Deployed
+
+        p.help-block To deploy your first version run the following yoke command:
+        cli-instruction(value="'yoke deploy'")
+
+    div(ng-show="versions.length")
+      div(ng-repeat="version in ::versions")
+        .row 
+          .col-md-6
+            span {{version.name}}
+          .col-md-3
+            span {{version.created | date:'MMM d h:mm a'}}
+          .col-md-3
+            .pull-right
+              img.avatar(ng-show="version.avatar", ng-src="{{version.avatar}}")
+              span {{version.username}}
+
+        p(ng-show="version.message") {{version.message}}
+
+
+      //- table.table.table-bordered(ng-cloak)
+      //-   thead
+      //-     th Id
+      //-     th Number
+      //-     th.version(style="width:140px") Name
+      //-     th(style="width:140px") Date
+      //-     th(style="140px") User
+      //-     th Message
+      //-     th.buttons(style="width:100px")
+      //-   tbody
+      //-     tr(ng-repeat="version in versions")
+      //-       td {{version.versionId}}
+      //-       td {{version.versionNum}}
+      //-       td
+      //-         span {{version.name}}
+      //-         span.pull-right
+      //-           a.btn.btn-default.push-right(ng-href="{{previewUrl(version.versionId)}}", target="_blank", tooltip="Launch Version", tooltip-placement="bottom")
+      //-             i.fa.fa-external-link
+
+      //-       td {{version.created | date:'MMM d h:mm a'}}
+      //-       td
+      //-         img.avatar(ng-show="version.avatar", ng-src="{{version.avatar}}")
+      //-         span {{version.username}}
+      //-       td {{version.message}}
+      //-       td
+      //-         button.btn.btn-default(ng-click="deleteVersion(version)") Delete
+      //-     tr(ng-hide="versions.length")
+      //-       td(colspan="5")
+      //-         p.help-block No versions have been deployed
+
+  tab(heading="Traffic Control Rules", ng-show="application.trafficControlEnabled")
+    p.help-block Traffic control rules allow you to adjust the proportion of app users are given a particular version. You can split traffic as many ways as you like as long as the total adds up to 100.
+
+    .alert.alert-warning(ng-hide="versions.length") <strong>No deployed versions</strong>. Before you can direct any traffic, at least one version of the app needs to be deployed.
+    .alert.alert-warning(ng-show="versions.length && application.trafficControlRules.length == 0") <strong>No traffic control rules defined</strong>. Before live users can hit your site, you need to setup one or more versions to direct traffic to.
+
+    .alert.alert-danger(ng-show="saveRulesError", ng-switch="saveRulesError")
+      span(ng-switch-when="trafficTotal") The traffic percentages must add up to 100%.
+      span(ng-switch-when="noRulesDefined") At least one traffic rule must be defined.
+      span(ng-switch-when="saveError") Unexpected error updating traffic rules.
+
+    .alert.alert-success(ng-show="showTrafficUpdateSuccess")
+      button.close(type="button", aria-hidden="true", ng-click="showTrafficUpdateSuccess=false") &times;
+      span Traffic control rules successfully updated
+
+    table.table.table-bordered.traffic-rules(ng-show="versions.length")
+      colgroup
+        col.name(span="1")
+        col(span="1")
+        col.traffic(span='1')
+        col(span='1')
+
+      thead
+        th.version Version
+        th Traffic
+        th.buttons
+      tbody
+        tr(ng-hide="trafficControlRules.length")
+        tr(ng-repeat='rule in trafficControlRules')
+          td
+            div(ng-show="editTrafficMode")
+              select.form-control(ng-options="version.name for version in versions", ng-model="rule.version")
+                option(value="") -- Select Version --
+
+            div(ng-hide="editTrafficMode")
+              span {{rule.version.name}}
+
+          td.traffic
+            input(type="range", ng-model="rule.traffic", min="0", max="1", step=".1", ng-disabled="!editTrafficMode")
+            span.value {{rule.traffic * 100}}%
+          td
+            a.btn.btn-default.btn-sm.btn-icon-rt(ng-href="{{previewUrl(version.versionId)}}", target="_blank", ng-disabled="!rule.versionId")
+              span Preview
+              i.fa.fa-arrow-circle-right.fa-lg
+            button.btn.btn-danger.btn-sm.btn-icon-left(ng-click="deleteRule(rule)", ng-show="editTrafficMode")
+              i.fa.fa-trash-o.fa-lg
+              span Delete
+
+      tr(ng-show='editTrafficMode')
+        td
+          select.form-control(ng-options="version.name for version in versions", ng-model="newRule.version")
+            option(value="") -- Select Version --
+
+        td.traffic
+          input(type="range", ng-model="newRule.traffic", min="0", max="1", step=".1", ng-disabled="!editTrafficMode || !newRule.version")
+          span.value {{newRule.traffic * 100}}%
+        td
+          a.btn.btn-default.btn-sm.preview.btn-icon-rt(ng-disabled="!(newRule.version)", ng-href="{{previewUrl(newRule.versionId)}}", target="_blank")
+            span Preview
+            i.fa.fa-arrow-circle-right.fa-lg
+
+    div(ng-show="versions.length")
+      button.btn.btn-primary(ng-hide='editTrafficMode', ng-click='showRuleEditMode()') Edit Rules
+      button.btn.btn-default(ng-show='editTrafficMode', ng-click='resetRuleForm()') Cancel
+      button.btn.btn-primary(ng-show='editTrafficMode', ng-click='saveTrafficRules()') Save Changes
+
+  tab(heading="Snapshots", ng-show="application.snapshotsEnabled")
+    .alert.alert-success(ng-show="snapshotMessage")
+      button.close(type="button", aria-hidden="true", ng-click="snapshotMessage=null") &times;
+      span {{snapshotMessage}}
+
+    .row
+      .col-md-9
+        p.help-block Snapshots are static captures of your page's HTML state after JavaScript has dynamically loaded the content. They are used to serve to search bots that don't execute JavaScript.
+      .col-md-3
+        div.pull-right
+          button.btn.btn-default.push-right(ng-click="openQueueSnapshot()") Request Snapshot
+
+    table.table.table-bordered
+      thead
+        th Path
+        th Captured
+        th Page Size
+      tbody
+        tr(ng-repeat="snapshot in snapshots")
+          td
+            span {{snapshot.path}}
+            span.pull-right
+              a.btn.btn-default.push-right(target="_blank", ng-href="{{snapshotUrl(snapshot)}}", title="Preview as Search Bot")
+                i.fa.fa-external-link
+
+          td {{snapshot.timestamp | date:'MMM dd, yyyy HH:mm'}}
+          td {{snapshot.pageSize | bytes:0}}
+
+        tr(ng-hide="snapshots.length")
+          td(colspan="3")
+            p.help-block No snapshots have been taken.
+
+
+script#queueSnapshotModal(type="text/ng-template")
+  .modal-header
+    h4 Request Snapshot
+  .modal-body
+    .alert.alert-danger(ng-show="error") {{error}}
+
+    p.help-block Outside of the reguarly scheduled weekly crawl, you can force a snapshot of a single URL or a full crawl of the entire site. Note that this will count against your data quota for the month.
+    form.form-horizontal
+      .form-group
+        label.col-sm-2.control-label Type
+        .col-sm-10
+          label.radio-inline
+            input(type="radio", value="singleUrl", name="snapshotQueueType", ng-model="snapshot.mode")
+            span Single URL
+          label.radio-inline
+            input(type="radio", value="fullCrawl", name="snapshotQueueType", ng-model="snapshot.mode")
+            span Full Site Crawl
+
+      .form-group(ng-show="snapshot.mode == 'singleUrl'")
+        label.col-sm-2.control-label URL Path
+        .col-sm-10
+          input.form-control(type="text", placeholder="Just path portion of URL, i.e. '/blog/new-post'", ng-model="snapshot.path")
+
+  .modal-footer
+    button.btn.btn-default(ng-click="modal.dismiss('cancel')", ng-disabled="queueing") Cancel
+    button.btn.btn-primary.delete-btn.btn-icon-left(type="button", ng-click="submit()", ng-disabled="queuing") Submit

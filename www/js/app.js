@@ -3,8 +3,10 @@ angular.module('controllers', []);
 angular.module('directives', []);
 angular.module('filters', []);
 
+angular.module('services').value('Config', __config__);
+
 angular.module('portal', ['ngRoute', 'ngResource', 'ngCookies',
-  'ui.bootstrap', 'duScroll', 'services', 'controllers', 'directives', 'filters', 'templates']);
+  'ui.bootstrap', 'duScroll', 'services', 'controllers', 'directives', 'filters']);
 
 angular.module('portal').config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
   // Use html5 pushState for route navigation
@@ -18,95 +20,84 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
 
   $sceDelegateProvider.resourceUrlWhitelist([
     // Allow same origin resource loads.
-    'self'
+    'self',
+    __config__.apiUrl
   ]);
-
-  function templateUrl(path) {
-    if (aerobaticProvider.config.buildType === 'debug')
-      return aerobaticProvider.config.cdnUrl + '/partials/' + path;
-    else
-      return path;
-  }
 
   $routeProvider.
     when('/', {
-      template: templateUrl('index.jade'),
+      // template: templateUrl('index.jade'),
       controller: 'IndexCtrl',
       resolve: routeResolve
     }).
     when('/profile', {
-      templateUrl: templateUrl('profile.jade'),
+      templateUrl: '/views/partials/profile',
       controller: 'ProfileCtrl',
       resolve: routeResolve
     }).
-    when('/myapps', {
-      templateUrl: templateUrl('myApps.jade'),
-      controller: 'MyAppsCtrl',
-      resolve: routeResolve
-    }).
     when('/orgs/create', {
-      templateUrl: templateUrl('createOrg.jade'),
+      templateUrl: '/views/partials/create-org',
       controller: 'CreateOrgCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId', {
-      templateUrl: templateUrl('orgHome.jade'),
+      templateUrl: '/views/partials/org-home',
       controller: 'OrgHomeCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId/settings', {
-      templateUrl: templateUrl('orgSettings.jade'),
+      templateUrl: '/views/partials/org-settings',
       controller: 'OrgSettingsCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId/usage', {
-      templateUrl: templateUrl('orgUsage.jade'),
+      templateUrl: '/views/partials/usage',
       controller: 'OrgUsageCtrl',
       resolve: routeResolve
     }).
     when('/apps/:appId', {
-      templateUrl: templateUrl('appVersions.jade'),
+      templateUrl: '/views/partials/app-versions',
       controller: 'AppVersionsCtrl',
       resolve: routeResolve
     }).
     when('/apps/:appId/versions', {
-      templateUrl: templateUrl('appVersions.jade'),
+      templateUrl: '/views/partials/app-versions',
       controller: 'AppVersionsCtrl',
       resolve: routeResolve
     }).
     when('/apps/:appId/settings', {
-      templateUrl: templateUrl('appSettings.jade'),
+      templateUrl: '/views/partials/app-settings',
       controller: 'AppSettingsCtrl',
-      resolve: routeResolve
-    }).
-    when('/apps/:appId/members', {
-      templateUrl: templateUrl('appMembers.jade'),
-      controller: 'AppMembersCtrl',
       resolve: routeResolve
     }).
     otherwise({
       redirectTo: '/'
     });
 
-  $httpProvider.interceptors.push(function($q, $window, aerobatic) {
+  $httpProvider.interceptors.push(function($q, $window) {
     return {
       responseError: function(rejection) {
         var status = rejection.status;
         // If the status is 401 Unauthorized, automatically logout
         if (status == 401) {
-          $window.location = '/_logout?error=expired';
+          $window.location = '/logout?error=expired';
           return;
         }
 
         return $q.reject(rejection);
+      },
+      request: function(config) {
+        // Add the JWT http header
+        if (config.url.indexOf(__config__.apiUrl) === 0)
+          config.headers['X-Access-Token'] = __config__.user.jwt.token;
+          
+        return config;
       }
     };
   });
-
-  ngClipProvider.setPath("https://s3-us-west-2.amazonaws.com/aerobatic-media/ZeroClipboard.swf");
 });
 
-angular.module('aerobaticPortal').run(function($rootScope, $location, $log, aerobatic) {
+angular.module('portal').run(function($rootScope, $location, $log) {
   $rootScope.$on('$routeChangeError', function(event, current, previous, eventObj) {
     $log.error("Route change error", eventObj);
 
@@ -132,7 +123,7 @@ angular.module('aerobaticPortal').run(function($rootScope, $location, $log, aero
     if (app.domain)
       url = protocol + '://' + app.domain;
     else
-      url = protocol + '://' + app.name + '.' + aerobatic.appHost;
+      url = protocol + '://' + app.name + '.' + __config__.virtualHost;
 
     return url;
   };

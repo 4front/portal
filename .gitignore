@@ -1,2 +1,4 @@
 node_modules
 www/css/app.css
+.DS_Store
+*.log
