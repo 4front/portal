@@ -1,31 +1,7 @@
 doctype html
 html
-  head
-    title 4front Portal
-    base(href='/portal')
-    link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/favicons/apple-touch-icon-114x114-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='120x120', href='/favicons/apple-touch-icon-120x120-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/favicons/apple-touch-icon-144x144-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='152x152', href='/favicons/apple-touch-icon-152x152-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='60x60', href='/favicons/apple-touch-icon-60x60-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/favicons/apple-touch-icon-72x72-precomposed.png')
-    link(rel='apple-touch-icon-precomposed', sizes='76x76', href='/favicons/apple-touch-icon-76x76-precomposed.png')
-    link(rel='icon', type='image/png', sizes='64x64', href='/favicons/favicon.png')
-    
-    //- // Consolidated stylesheet for release and individual files in debug
-    link(data-aero-build='release', rel='stylesheet', href='css/components.min.css')
-    link(data-aero-build='release', rel='stylesheet', href='css/app.min.css')
-    link(data-aero-build='debug', rel='stylesheet', href='bower_components/bootstrap-css/css/bootstrap.css')
-    link(data-aero-build='debug', rel='stylesheet', href='bower_components/font-awesome/css/font-awesome.css')
-    link(data-aero-build='debug', rel='stylesheet', href='/css/styles.styl.css')
-    link(data-aero-build='debug', rel='stylesheet', href='/css/versions.styl.css')
-
-    link(rel="stylesheet", href="//fonts.googleapis.com/css?family=Dosis:100,200,300,400,500")
-
-    style.
-      [ng-cloak] {
-        display: none
-      }
+  include partials/head
+  
   body
     div(ng-app='aerobaticPortal', ng-controller='LayoutCtrl')
       .navbar.navbar-fixed-top(role='navigation')
@@ -39,14 +15,14 @@ html
                 a(href='http://4front.io/docs', target='_blank') Docs
               li.dropdown
                 a.dropdown-toggle
-                  img.avatar(ng-src='{{aerobatic.user.avatar}}')
-                  strong {{aerobatic.user.username}}
+                  //- img.avatar(ng-src='{{aerobatic.user.avatar}}')
+                  strong #{user.username}
                   span.caret
                 ul.dropdown-menu
                   li
                     a(href='/profile') Profile
                   li
-                    a(href='/_logout', target='_self') Logout
+                    a(href='/logout', target='_self') Logout
 
       .top-banner(ng-class="{'trial':organization&&organization.plan=='trial'}", ng-cloak)
         .container
@@ -125,26 +101,19 @@ html
 
 
 
-    div(data-aero-build='release')
-      script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js')
-      script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-route.min.js')
-      script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-resource.min.js')
-      script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-cookies.min.js')
-      script(src='//cdn.jsdelivr.net/lodash/2.4.1/lodash.min.js')
-      script(src='components.min.js')
-      script(src='app.min.js')
+    //- div(data-aero-build='release')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-route.min.js')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-resource.min.js')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-cookies.min.js')
+    //-   script(src='//cdn.jsdelivr.net/lodash/2.4.1/lodash.min.js')
+    //-   script(src='components.min.js')
+    //-   script(src='app.min.js')
     //- // Individual scripts for debug build
-    div(data-aero-build='debug')
-      script(src='bower_components/lodash/dist/lodash.js')
-      script(src='bower_components/angular/angular.js')
-      script(src='bower_components/angular-resource/angular-resource.js')
-      script(src='bower_components/angular-route/angular-route.js')
-      script(src='bower_components/angular-cookies/angular-cookies.js')
-      script(src='bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js')
-      script(src='bower_components/angular-aerobatic/angular-aerobatic.js')
-      script(src='bower_components/zeroclipboard/dist/ZeroClipboard.js')
-      script(src='bower_components/ng-clip/src/ngClip.js')
-      script(src='bower_components/angular-scroll/angular-scroll.js')
-      script(src='node_modules/angular-aerobatic/angular-aerobatic.js')
-      script(src='node_modules/angular-google-chart/ng-google-chart.js')
+    div
+      script(src='/node_modules/lodash/dist/lodash.js')
+      script(src='/node_modules/angular/angular.js')
+      script(src='/node_modules/angular/angular-route.js')
+      script(src='/node_modules/angular/angular-resource.js')
+      script(src='/node_modules/angular/angular-bootstrap.js')      
       script(data-aero-src='js/**/*.js')

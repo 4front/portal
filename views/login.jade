@@ -1,0 +1,31 @@
+doctype html
+html
+  include partials/head
+  
+  body.login
+    div.container
+      .row
+        .col-md-3
+        .col-md-6
+          img.logo(src="https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png")
+          
+          if loginError
+            .alert.alert-danger(style="margin-top:20px") #{loginError}
+            
+          form(role="form", method="post", action="/login", novalidate)
+            .form-group
+              label.sr-only(for='username') Username
+              input.form-control(type='email', autocapitalize="none", name="username", placeholder='Username', autofocus)
+
+            .form-group
+              label.sr-only(for='password') Password
+              input.form-control(name="password", autocapitalize="none", type='password', placeholder='Password')
+
+            .checkbox
+              label
+                input(name="rememberMe", type="checkbox") 
+                span Remember me on this device
+
+            .form-group
+              button.btn.btn-primary.btn-block(type="submit") Sign-In
+        .col-md-3
