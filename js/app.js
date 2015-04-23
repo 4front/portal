@@ -3,7 +3,7 @@ angular.module('controllers', []);
 angular.module('directives', []);
 angular.module('filters', []);
 
-angular.module('portal', ['ngRoute', 'ngResource', 'ngCookies',
+angular.module('aerobaticPortal', ['ngRoute', 'ngResource', 'ngCookies',
   'ui.bootstrap', 'duScroll', 'services', 'controllers', 'directives', 'filters', 'templates']);
 
 angular.module('portal').config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {

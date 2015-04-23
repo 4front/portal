@@ -3,12 +3,12 @@ html
   include partials/head
   
   body
-    div(ng-app='aerobaticPortal', ng-controller='LayoutCtrl')
+    div(ng-app='portal', ng-controller='LayoutCtrl')
       .navbar.navbar-fixed-top(role='navigation')
         .container
           .navbar-header(ng-cloak)
             a.navbar-brand(href='/')
-              img(asset-src='images/aerobatic-logo.png', alt='Aerobatic - wings for nimble web apps')
+              img(src='https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png', alt='4front')
           .collapse.navbar-collapse
             ul.nav.navbar-nav.navbar-right
               li
@@ -111,9 +111,9 @@ html
     //-   script(src='app.min.js')
     //- // Individual scripts for debug build
     div
-      script(src='/node_modules/lodash/dist/lodash.js')
+      script(src='/node_modules/lodash/index.js')
       script(src='/node_modules/angular/angular.js')
-      script(src='/node_modules/angular/angular-route.js')
-      script(src='/node_modules/angular/angular-resource.js')
-      script(src='/node_modules/angular/angular-bootstrap.js')      
+      script(src='/node_modules/angular-route/angular-route.js')
+      script(src='/node_modules/angular-resource/angular-resource.js')
+      script(src='/node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
       script(data-aero-src='js/**/*.js')
