@@ -1,51 +1,14 @@
-angular.module('controllers').controller('CreateOrgCtrl', function($scope, $rootScope, $log, $location, $window, Resources, Profile) {
+angular.module('controllers').controller('CreateOrgCtrl', function($scope, $rootScope, $log, $location, $window, Resources, Config, Context) {
   'use strict';
 
   $scope.newOrg = new Resources.Organization();
-  $scope.newOrg.plan = 'trial';
 
   // Load the plans
-  $scope.plans = [
-    {
-      name: 'Tier 1',
-      code: 'tier1',
-      price: 30,
-      priceDisplay: '$30 per month',
-      operations: '150K'
-    },
-    {
-      name: 'Tier 2',
-      code: 'tier2',
-      price: 50,
-      priceDisplay: '$50 per month',
-      operations: '300K'
-    },
-    {
-      name: 'Tier 3',
-      code: 'tier3',
-      price: 140,
-      priceDisplay: '$140 per month',
-      operations: '1MM'
-    },
-    {
-      name: 'Trial',
-      code: 'trial',
-      price:  0,
-      priceDisplay: 'Try us free for 45 days',
-      operations: '20K'
-    }
-  ];
-
-  $scope.selectedPlan = $scope.plans[3];
-
-  // Resources.Organization.planlimits(function(data) {
-  //   var plans = [];
-  //   plans.push(_.extend(data.level1, {name: 'level1', title: 'Level 1'}));
-  //   plans.push(_.extend(data.level2, {name: 'level2', title: 'Level 2'}));
-  //   plans.push(_.extend(data.level3, {name: 'level3', title: 'Level 3'}));
-  //   plans.push(_.extend(data.trial, {name: 'trial', title: 'Trial', price: 'Free for ' + data.trial.duration + ' days'}));
-  //   $scope.plans = plans;
-  // });
+  $scope.paidPlans = Config.paidPlans;
+  if ($scope.paidPlans) {
+    $scope.newOrg.plan = 'trial';
+    $scope.selectedPlan = $scope.plans[3];
+  }
 
   $scope.choosePlan = function(plan) {
     // $scope.newOrg.monthlyRate = plan.price;

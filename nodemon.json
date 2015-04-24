@@ -1,3 +1,4 @@
 {
-  "ignore": ["www/*", "test/*"]
+  "ignore": ["www/", "test/"],
+  "verbose": true
 }

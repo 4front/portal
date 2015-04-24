@@ -1,11 +1,13 @@
 
 angular.module('controllers').controller('OrgHomeCtrl', function($scope, $rootScope, $location, $log,
-  $timeout, $q, $modal, $routeParams, $cookies, Resources, Profile, Config) {
+  $timeout, $q, $modal, $routeParams, $cookies, Resources, Context, Config) {
   'use strict';
 
   // $rootScope.organization = _.find($rootScope.organizations, {orgId: $routeParams.orgId});
   if (!$rootScope.organization)
     return $location.path('/');
+
+  $scope.localInstance = Config.localInstance;
 
   // If our applications aren't loaded yet, get them now. Keep them in rootScope
   // so they are accessible to multiple controllers without reloading everytime.

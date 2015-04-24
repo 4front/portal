@@ -13,7 +13,7 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
   $locationProvider.html5Mode(true);
 
   var routeResolve = {
-    Profile: ['routeInitializer', function(routeInitializer) {
+    Context: ['routeInitializer', function(routeInitializer) {
       return routeInitializer();
     }]
   };
@@ -26,7 +26,7 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
 
   $routeProvider.
     when('/', {
-      // template: templateUrl('index.jade'),
+      template: '',
       controller: 'IndexCtrl',
       resolve: routeResolve
     }).
@@ -90,21 +90,38 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
         // Add the JWT http header
         if (config.url.indexOf(__config__.apiUrl) === 0)
           config.headers['X-Access-Token'] = __config__.user.jwt.token;
-          
+
         return config;
       }
     };
   });
 });
 
-angular.module('portal').run(function($rootScope, $location, $log) {
-  $rootScope.$on('$routeChangeError', function(event, current, previous, eventObj) {
-    $log.error("Route change error", eventObj);
+angular.module('portal').run(function($rootScope, $location, $log, $cookies, Config) {
+  // Store the user's organizations on the rootScope
+  $rootScope.organizations = Config.user.orgs;
 
-    // Store the route the user was trying to get to in rootScope
-    if (current.$$route)
-      $rootScope.returnToPath = current.$$route.originalPath;
-  });
+  if ($rootScope.organizations.length) {
+    var defaultOrg = null;
+    if ($cookies.selectedOrgId)
+      $rootScope.defaultOrg = _.find($rootScope.organizations, {orgId: $cookies.selectedOrgId});
+
+    // If there was no org specified in the cookie, use the first org
+    if (!defaultOrg)
+      $rootScope.defaultOrg = _.first($rootScope.organizations);
+
+    // Store the orgId in the cookie
+    if ($rootScope.defaultOrg)
+      $cookies.selectedOrgId = $rootScope.defaultOrg.orgId;
+  }
+
+  // $rootScope.$on('$routeChangeError', function(event, current, previous, eventObj) {
+  //   $log.error("Route change error", eventObj);
+  //
+  //   // Store the route the user was trying to get to in rootScope
+  //   if (current.$$route)
+  //     $rootScope.returnToPath = current.$$route.originalPath;
+  // });
 
   $rootScope.previewUrl = function(versionId) {
     var url = $rootScope.application.url;

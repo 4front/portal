@@ -40,29 +40,13 @@ app.settings.login = require('4front-login')({
   identityProvider: app.settings.identityProvider,
 });
 
-// app.settings.login = function(username, password, callback) {
-//   var expires = Date.now() + (1000 * 60 * 60);
-//   var token = jwt.encode({
-//     iss: '123',
-//     exp: expires
-//   }, '4front_jwt_token_secret');
-//
-//   callback(null, {
-//     userId: '123',
-//     username: username,
-//     provider: 'local',
-//     jwt: {
-//       expires: expires,
-//       token: token
-//     }
-//   });
-// };
-
 app.use(app.settings.logger.request());
+
 app.use(require('./lib/portal')({
   debug: true,
   virtualHost: '4front.dev',
-  apiUrl: 'http://4front.dev/api'
+  apiUrl: 'http://4front.dev/api',
+  localInstance: true
 }));
 
 http.createServer(app).listen(3000, function(err) {

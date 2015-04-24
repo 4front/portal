@@ -1,4 +1,4 @@
-angular.module('controllers').controller('OrgSettingsCtrl', function($scope, $rootScope, $location, $log, $modal, Resources, Profile, aerobatic) {
+angular.module('controllers').controller('OrgSettingsCtrl', function($scope, $rootScope, $location, $log, $modal, Resources, Context) {
   $scope.allowedToDelete = $rootScope.organization.role === 'admin';
 
   $scope.confirmTerminate = function() {

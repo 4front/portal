@@ -48,8 +48,6 @@
   "devDependencies": {
     "4front-dynamodb": "file:../dynamodb",
     "4front-logger": "^1.0.1",
-    "4front-login": "file:../login",
-    "jwt-simple": "^0.3.0",
-    "stylus": "^0.50.0"
+    "4front-login": "file:../login"
   }
 }

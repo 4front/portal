@@ -53,7 +53,7 @@ tabset.tabset(style="margin-top: 25px", ng-hide="orgLoading")
         h3 Members
       .col-sm-6
         .pull-right
-          button.btn.btn-default.btn-icon-left(ng-click="openMemberModal()", ng-show="organization.role=='admin'")
+          button.btn.btn-default.btn-icon-left(ng-click="openMemberModal()", ng-show="organization.role=='admin'", ng-disabled="localInstance")
             i.fa.fa-plus
             span New Member
           button.btn.btn-default.push-right(ng-click="refreshEvents()")
@@ -70,7 +70,7 @@ tabset.tabset(style="margin-top: 25px", ng-hide="orgLoading")
             img.avatar(ng-show="member.avatar", ng-src="{{member.avatar}}")
             span {{member.username}}
             span.pull-right(ng-show="organization.role=='admin'")
-              button.btn.btn-default(title="Edit", ng-click="openMemberModal(member)")
+              button.btn.btn-default(title="Edit", ng-click="openMemberModal(member)", ng-disabled="localInstance")
                 i.fa.fa-gear
 
           td {{member.role | capitalize}}

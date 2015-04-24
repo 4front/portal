@@ -9,30 +9,34 @@ h1 Create Organization
       .form-group
         label(for="orgName") Organization name
         input.form-control(type="text", ng-model="newOrg.name", maxlength="50")
+        
+      .form-group(ng-hide="paidPlans")
+        button.btn.btn-primary(ng-click="submit()") Save
 
   .col-md-4
 
-h3 Select Plan
-.row
-  .col-md-3(ng-repeat="plan in plans")
-    .list-group.org-plan(ng-class="{selected:plan == selectedPlan}")
-      .list-group-item.heading
-        h4.list-group-item-heading {{plan.name}}
-      .list-group-item
-        h4 {{plan.priceDisplay}}
-      .list-group-item 
-        h4 {{plan.operations}} operations
-      .list-group-item
-        button.btn.btn-primary.btn-block.btn-lg(ng-show="plan == selectedPlan")
-          i.fa.fa-check-circle(style="margin-right:8px")
-          span Selected
-        button.btn.btn-default.btn-block.btn-lg(ng-click="choosePlan(plan)", ng-hide="plan == selectedPlan", disabled) 
-          span Select
+//- Only show the paid plans if they are relevant for this instance
+div(ng-show="paidPlans")
+  h3 Select Plan
+  .row
+    .col-md-3(ng-repeat="plan in plans")
+      .list-group.org-plan(ng-class="{selected:plan == selectedPlan}")
+        .list-group-item.heading
+          h4.list-group-item-heading {{plan.name}}
+        .list-group-item
+          h4 {{plan.priceDisplay}}
+        .list-group-item 
+          h4 {{plan.operations}} operations
+        .list-group-item
+          button.btn.btn-primary.btn-block.btn-lg(ng-show="plan == selectedPlan")
+            i.fa.fa-check-circle(style="margin-right:8px")
+            span Selected
+          button.btn.btn-default.btn-block.btn-lg(ng-click="choosePlan(plan)", ng-hide="plan == selectedPlan", disabled) 
+            span Select
 
-p.help-block A server operation includes requests for your index page, API proxy calls, OAuth calls, and SEO snapshots.
+  p.help-block A server operation includes requests for your index page, API proxy calls, OAuth calls, and SEO snapshots.
 
-button.btn.btn-lg.btn-primary(ng-click="submit()") Start 45 Day Trial
+  button.btn.btn-lg.btn-primary(ng-click="submit()") Start 45 Day Trial
 
-
-div(ng-show="selectedPlan.code !== 'trial'")
-  h2 Billing Info
+  div(ng-show="selectedPlan.code !== 'trial'")
+    h2 Billing Info
