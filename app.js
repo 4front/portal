@@ -6,6 +6,8 @@ var DynamoDb = require('4front-dynamodb');
 
 var app = express();
 
+app.settings.virtualHost = '4front.dev';
+
 app.settings.identityProvider = {
   name: 'local',
   authenticate: function(username, password, callback) {
@@ -23,8 +25,6 @@ app.settings.database = new DynamoDb({
   secretAccessKey: '4front',
   endpoint: 'http://localhost:8000'
 });
-
-app.settings.virtualHost = '4front.dev';
 
 app.settings.logger = require('4front-logger')({
   logger: '4front-logger',

@@ -12,7 +12,7 @@ html
           if loginError
             .alert.alert-danger(style="margin-top:20px") #{loginError}
             
-          form(role="form", method="post", action="/login", novalidate)
+          form(role="form", method="post", action="login", novalidate)
             .form-group
               label.sr-only(for='username') Username
               input.form-control(type='email', autocapitalize="none", name="username", placeholder='Username', autofocus)

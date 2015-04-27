@@ -61,7 +61,7 @@ html
                 i.fa.fa-external-link
               hr(style="margin-top:8px")
             .col-md-2
-              a.btn.btn-default.btn-icon-left.btn-block(ng-href="/orgs/{{organization.orgId}}")
+              a.btn.btn-default.btn-icon-left.btn-block(ng-href="orgs/{{organization.orgId}}")
                 i.fa.fa-chevron-left
                 span Back to Org
 
@@ -73,15 +73,15 @@ html
           .col-md-2(,='', ng-hide='fullScreen')
             div(ng-show="navMode=='org' && organization", ng-cloak)
               .list-group.right-menu
-                a.list-group-item.btn-icon-left(nav-href="/orgs/{{organization.orgId}}")
+                a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
                   i.fa.fa-home.fa-lg
                   span Home
 
-                a.list-group-item.btn-icon-left(nav-href="/orgs/{{organization.orgId}}/usage")
+                a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
                   i.fa.fa-gear.fa-bar-chart
                   span Usage
 
-                a.list-group-item.btn-icon-left(nav-href="/orgs/{{organization.orgId}}/settings")
+                a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/settings")
                   i.fa.fa-gear.fa-lg
                   span Settings
 
@@ -110,12 +110,13 @@ html
     //-   script(src='components.min.js')
     //-   script(src='app.min.js')
     //- // Individual scripts for debug build
+    script(src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.7.0/lodash.min.js")
+    
     div(data-build-type="debug")
-      script(src='/node_modules/lodash/index.js')
-      script(src='/node_modules/angular/angular.js')
-      script(src='/node_modules/angular-route/angular-route.js')
-      script(src='/node_modules/angular-resource/angular-resource.js')
-      script(src='/node_modules/angular-cookies/angular-cookies.js')
-      script(src='/node_modules/angular-scroll/angular-scroll.js')
-      script(src='/node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
+      script(src='node_modules/angular/angular.js')
+      script(src='node_modules/angular-route/angular-route.js')
+      script(src='node_modules/angular-resource/angular-resource.js')
+      script(src='node_modules/angular-cookies/angular-cookies.js')
+      script(src='node_modules/angular-scroll/angular-scroll.js')
+      script(src='node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
       script(data-src-expand='js/**/*.js')

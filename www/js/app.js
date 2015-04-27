@@ -31,42 +31,42 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
       resolve: routeResolve
     }).
     when('/profile', {
-      templateUrl: '/views/partials/profile',
+      templateUrl: 'views/partials/profile',
       controller: 'ProfileCtrl',
       resolve: routeResolve
     }).
     when('/orgs/create', {
-      templateUrl: '/views/partials/create-org',
+      templateUrl: 'views/partials/create-org',
       controller: 'CreateOrgCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId', {
-      templateUrl: '/views/partials/org-home',
+      templateUrl: 'views/partials/org-home',
       controller: 'OrgHomeCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId/settings', {
-      templateUrl: '/views/partials/org-settings',
+      templateUrl: 'views/partials/org-settings',
       controller: 'OrgSettingsCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId/usage', {
-      templateUrl: '/views/partials/usage',
+      templateUrl: 'views/partials/usage',
       controller: 'OrgUsageCtrl',
       resolve: routeResolve
     }).
     when('/apps/:appId', {
-      templateUrl: '/views/partials/app-versions',
+      templateUrl: 'views/partials/app-versions',
       controller: 'AppVersionsCtrl',
       resolve: routeResolve
     }).
     when('/apps/:appId/versions', {
-      templateUrl: '/views/partials/app-versions',
+      templateUrl: 'views/partials/app-versions',
       controller: 'AppVersionsCtrl',
       resolve: routeResolve
     }).
     when('/apps/:appId/settings', {
-      templateUrl: '/views/partials/app-settings',
+      templateUrl: 'views/partials/app-settings',
       controller: 'AppSettingsCtrl',
       resolve: routeResolve
     }).
