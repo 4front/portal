@@ -1,0 +1,65 @@
+doctype html
+html(lang='en')
+  include partials/head
+  body(ng-app='portal', ng-controller='LayoutCtrl')
+    nav.navbar.navbar-inverse.navbar-fixed-top
+      .container-fluid
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='/')
+            img(src='https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png', alt='4front')
+        
+        #navbar.navbar-collapse.collapse
+          ul.nav.navbar-nav.navbar-right
+            li
+              a(href='#') Dashboard
+            li
+              a(href='#') Settings
+            li
+              a(href='#') Profile
+            li
+              a(href='#') Help
+            li
+              a(href='/logout', target="_self") Logout
+              
+          form.navbar-form.navbar-right
+            input.form-control(type='text', placeholder='Search...')
+    .container-fluid
+      .row
+        .col-sm-3.col-md-2.sidebar
+          //- Pinned apps
+      
+        .col-sm-3.col-md-2.sidebar
+          h3 Organizations
+          ul.nav.nav-sidebar
+            li(ng-repeat="org in organizations", ng-class="{active: org.orgId == organization.orgId}") 
+              a(nav-href="/orgs/{{org.orgId}}")
+                span {{org.name}}
+            
+        .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+          .ng-view
+            //- Main view 
+                  
+    //- div(data-aero-build='release')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-route.min.js')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-resource.min.js')
+    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-cookies.min.js')
+    //-   script(src='//cdn.jsdelivr.net/lodash/2.4.1/lodash.min.js')
+    //-   script(src='components.min.js')
+    //-   script(src='app.min.js')
+    //- // Individual scripts for debug build
+    script(src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.7.0/lodash.min.js")
+    
+    div(data-build-type="debug")
+      script(src='node_modules/angular/angular.js')
+      script(src='node_modules/angular-route/angular-route.js')
+      script(src='node_modules/angular-resource/angular-resource.js')
+      script(src='node_modules/angular-cookies/angular-cookies.js')
+      script(src='node_modules/angular-scroll/angular-scroll.js')
+      script(src='node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
+      script(data-src-expand='js/**/*.js')

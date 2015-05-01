@@ -23,7 +23,8 @@ app.settings.database = new DynamoDb({
   region: 'us-west-2',
   accessKeyId: '4front',
   secretAccessKey: '4front',
-  endpoint: 'http://localhost:8000'
+  endpoint: 'http://localhost:8000',
+  tablePrefix: '4front_'
 });
 
 app.settings.logger = require('4front-logger')({

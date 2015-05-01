@@ -1,6 +1,6 @@
 h1,
 .h1 {
-  font-family: "Dosis", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 body,
 h2,
@@ -84,13 +84,12 @@ h3,
   margin-left: 10px;
 }
 .navbar .navbar-nav > li > a {
-  text-transform: uppercase;
   color: #48c6f2;
   border: solid 1px transparent;
   border-radius: 4px;
   font-family: 'Dosis', sans-serif;
   padding: 5px;
-  font-size: 18px;
+  font-size: 14px;
 }
 .navbar .navbar-nav > li > a:hover {
   background-color: transparent;
