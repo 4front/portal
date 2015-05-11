@@ -41,6 +41,29 @@ html(lang='en')
                 span {{org.name}}
             
         .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+          //- top menu
+          ul(ng-show="navMode=='org' && organization", ng-cloak)
+            li.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
+              i.fa.fa-home.fa-lg
+              span Apps
+
+            a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
+              i.fa.fa-home.fa-lg
+              span Members
+                
+            a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
+              i.fa.fa-gear.fa-bar-chart
+              span Usage
+              
+              a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
+                i.fa.fa-gear.fa-bar-chart
+                span Activity
+
+            a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/settings")
+              i.fa.fa-gear.fa-lg
+              span Settings
+
+        
           .ng-view
             //- Main view 
                   
