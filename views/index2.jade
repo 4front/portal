@@ -67,14 +67,6 @@ html(lang='en')
           .ng-view
             //- Main view 
                   
-    //- div(data-aero-build='release')
-    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular.min.js')
-    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-route.min.js')
-    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.24/angular-resource.min.js')
-    //-   script(src='//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-cookies.min.js')
-    //-   script(src='//cdn.jsdelivr.net/lodash/2.4.1/lodash.min.js')
-    //-   script(src='components.min.js')
-    //-   script(src='app.min.js')
     //- // Individual scripts for debug build
     script(src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.7.0/lodash.min.js")
     
@@ -86,3 +78,7 @@ html(lang='en')
       script(src='node_modules/angular-scroll/angular-scroll.js')
       script(src='node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
       script(data-src-expand='js/**/*.js')
+      
+    div(data-aero-build='release')
+      script(src='dist/vendor.min.js')
+      script(src='dist/app.min.js')

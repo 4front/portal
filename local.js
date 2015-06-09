@@ -24,7 +24,8 @@ app.settings.database = new DynamoDb({
   accessKeyId: '4front',
   secretAccessKey: '4front',
   endpoint: 'http://localhost:8000',
-  tablePrefix: '4front_'
+  tablePrefix: '4front_',
+  cryptoPassword: '4front'
 });
 
 app.settings.logger = require('4front-logger')({
@@ -47,7 +48,8 @@ app.use(require('./lib/portal')({
   debug: true,
   virtualHost: '4front.dev',
   apiUrl: 'http://4front.dev/api',
-  localInstance: true
+  localInstance: true,
+  sessionSecret: '4front'
 }));
 
 http.createServer(app).listen(3000, function(err) {
