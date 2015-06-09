@@ -17,7 +17,7 @@ gulp.task('default', function() {
 });
 
 gulp.task('clean', function(cb) {
-  del(['./dist'], cb);
+  del(['./www/dist'], cb);
 });
 
 gulp.task('buildVendorJs', function() {
@@ -69,7 +69,7 @@ gulp.task('buildCss', function() {
        compress: true
      }))
      .pipe(concat('app.min.css'))
-     .pipe(gulp.dest('./dist/css'));
+     .pipe(gulp.dest('./www/dist'));
 });
 
 gulp.task('build', function(callback) {
