@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test",
-    "postinstall": "gulp build"
+    "postinstall": "./.bin/gulp build"
   },
   "keywords": [
     "4front",
