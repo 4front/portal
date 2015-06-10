@@ -37,18 +37,18 @@
     "jwt-simple": "^0.3.0",
     "lodash": "^3.7.0",
     "simple-bufferstream": "^1.0.0",
-    "stylus": "^0.51.0"
-  },
-  "devDependencies": {
-    "4front-dynamodb": "file:../dynamodb",
-    "4front-logger": "^1.0.1",
-    "4front-login": "file:../login",
+    "stylus": "^0.51.0",
     "angular": "^1.4.0",
     "angular-bootstrap": "^0.12.0",
     "angular-cookies": "^1.4.0",
     "angular-resource": "^1.4.0",
     "angular-route": "^1.4.0",
-    "angular-scroll": "^0.6.5",
+    "angular-scroll": "^0.6.5"
+  },
+  "devDependencies": {
+    "4front-dynamodb": "file:../dynamodb",
+    "4front-logger": "^1.0.1",
+    "4front-login": "file:../login",
     "del": "^1.2.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.2",
