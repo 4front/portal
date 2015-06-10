@@ -5,22 +5,22 @@ head
   meta(http-equiv='X-UA-Compatible', content='IE=edge')
   meta(name='viewport', content='width=device-width, initial-scale=1')
   
-  link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/favicons/apple-touch-icon-114x114-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='120x120', href='/favicons/apple-touch-icon-120x120-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/favicons/apple-touch-icon-144x144-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='152x152', href='/favicons/apple-touch-icon-152x152-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='60x60', href='/favicons/apple-touch-icon-60x60-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/favicons/apple-touch-icon-72x72-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='76x76', href='/favicons/apple-touch-icon-76x76-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='114x114', href='/favicons/apple-touch-icon-114x114-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='120x120', href='/favicons/apple-touch-icon-120x120-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='144x144', href='/favicons/apple-touch-icon-144x144-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='152x152', href='/favicons/apple-touch-icon-152x152-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='60x60', href='/favicons/apple-touch-icon-60x60-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='72x72', href='/favicons/apple-touch-icon-72x72-precomposed.png')
+  //- link(rel='apple-touch-icon-precomposed', sizes='76x76', href='/favicons/apple-touch-icon-76x76-precomposed.png')
   link(rel='icon', type='image/png', sizes='64x64', href='/favicon.png')
   
   //- // Consolidated stylesheet for release and individual files in debug
-  link(data-aero-build='debug', rel='stylesheet', href='node_modules/bootstrap/dist/css/bootstrap.css')
-  link(data-aero-build='debug', rel='stylesheet', href='node_modules/font-awesome/css/font-awesome.css')
-  link(data-aero-build='debug', rel='stylesheet', href='css/app.css')
-  link(data-aero-build='debug', rel='stylesheet', href='css/dashboard.css')
+  link(data-build-type='debug', rel='stylesheet', href='node_modules/bootstrap/dist/css/bootstrap.css')
+  link(data-build-type='debug', rel='stylesheet', href='node_modules/font-awesome/css/font-awesome.css')
+  link(data-build-type='debug', rel='stylesheet', href='css/app.css')
+  link(data-build-type='debug', rel='stylesheet', href='css/dashboard.css')
   
-  link(data-aero-build='release', rel='stylesheet', href='app.min.css')
+  link(data-build-type='release', rel='stylesheet', href='dist/app.min.css')
   
   style.
     [ng-cloak] {
