@@ -46,9 +46,9 @@
     "angular-scroll": "^0.6.5"
   },
   "devDependencies": {
-    "4front-dynamodb": "file:../dynamodb",
-    "4front-logger": "^1.0.1",
-    "4front-login": "file:../login",
+    "4front-dynamodb": "git://github.com/4front/dynamodb.git",
+    "4front-logger": "git://github.com/4front/logger.git",
+    "4front-login": "git://github.com/4front/login.git",
     "del": "^1.2.0",
     "gulp": "^3.8.10",
     "gulp-concat": "^2.4.2",

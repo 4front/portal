@@ -70,7 +70,7 @@ html(lang='en')
     //- // Individual scripts for debug build
     script(src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/3.7.0/lodash.min.js")
     
-    div(data-build-type="debug")
+    div(data-build="debug")
       script(src='node_modules/angular/angular.js')
       script(src='node_modules/angular-route/angular-route.js')
       script(src='node_modules/angular-resource/angular-resource.js')
@@ -79,6 +79,6 @@ html(lang='en')
       script(src='node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
       script(data-src-expand='js/**/*.js')
       
-    div(data-aero-build='release')
+    div(data-build='release')
       script(src='dist/vendor.min.js')
       script(src='dist/app.min.js')
