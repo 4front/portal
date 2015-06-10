@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var minifyHtml = require("gulp-minify-html");
+// var minifyHtml = require("gulp-minify-html");
 var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
 var ngHtml2Js = require("gulp-ng-html2js");
@@ -33,7 +33,6 @@ gulp.task('buildVendorJs', function() {
 
   gulp.src(vendor)
     .pipe(concat('vendor.min.js'))
-    .pipe(concat('vendor.min.js'))
     .pipe(gulp.dest('./www/dist'));
 });
 
@@ -44,20 +43,20 @@ gulp.task('buildJs', function() {
     .pipe(concat('scripts.min.js'));
 
   // Compile all the partials into a
-  var partials = gulp.src("app/partials/*.html")
-    .pipe(minifyHtml({
-        empty: true,
-        spare: true,
-        quotes: true
-    }))
-    .pipe(ngHtml2Js({
-        moduleName: "templates",
-        prefix: "partials/"
-    }))
-    .pipe(uglify());
+  // var partials = gulp.src("app/partials/*.jade")
+  //   .pipe(minifyHtml({
+  //       empty: true,
+  //       spare: true,
+  //       quotes: true
+  //   }))
+  //   .pipe(ngHtml2Js({
+  //       moduleName: "templates",
+  //       prefix: "partials/"
+  //   }))
+  //   .pipe(uglify());
 
   // Combine the scripts and partials into a single uglified app.min.js file.
-  series(scripts, partials)
+  series(scripts)
     .pipe(concat('app.min.js'))
     .pipe(gulp.dest('./www/dist'));
 });
