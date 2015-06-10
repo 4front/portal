@@ -4,8 +4,7 @@
   "description": "Portal browser interface for 4front web app platform",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test",
-    "postinstall": "./node_modules/4front-portal/node_modules/.bin/gulp build"
+    "test": "mocha test"
   },
   "keywords": [
     "4front",
