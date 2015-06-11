@@ -14,11 +14,10 @@ head
   //- link(rel='apple-touch-icon-precomposed', sizes='76x76', href='/favicons/apple-touch-icon-76x76-precomposed.png')
   link(rel='icon', type='image/png', sizes='64x64', href='/favicon.png')
   
-  //- // Consolidated stylesheet for release and individual files in debug
-  link(data-build='debug', rel='stylesheet', href='node_modules/bootstrap/dist/css/bootstrap.css')
-  link(data-build='debug', rel='stylesheet', href='node_modules/font-awesome/css/font-awesome.css')
-  link(data-build='debug', rel='stylesheet', href='css/app.css')
+  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
+  link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css')
   
+  link(data-build='debug', rel='stylesheet', href='css/app.css')
   link(data-build='release', rel='stylesheet', href='dist/app.min.css')
   
   style.
