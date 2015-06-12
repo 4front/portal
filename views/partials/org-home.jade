@@ -1,166 +1,55 @@
 .alert.alert-danger(ng-show="error") {{error}}
 
-alert(ng-show="orgActivated", type="success", close="orgActivated=null")
-  span.h4 Organization has been activated.
-
 p.load-spinner(ng-show="orgLoading")
   i.fa.fa-spinner.fa-spin.fa-3x
   span.h3 Loading
 
-tabset.tabset(style="margin-top: 25px", ng-hide="orgLoading")
-  //- Application list
-  tab(heading="Applications")
-    .row
-      .col-sm-4
-        h3 Apps
-      .col-sm-8
-        .pull-right
-          form.form-inline(style="display:inline; margin-right:20px;")
-            input.form-control(type="text", placeholder="Search Apps", ng-show="showAppSearch()", ng-model="appFilterText")
-          button.btn.btn-default.btn-icon-left(ng-click="createAppModal()")
-            i.fa.fa-plus
-            span New Application
-          button.btn.btn-default.push-right(ng-click="refreshApps()")
-            i.fa.fa-refresh
+.row
+  .col-sm-4
+    h3 Apps
+  .col-sm-8
+    .pull-right
+      form.form-inline(style="display:inline; margin-right:20px;")
+        input.form-control(type="text", placeholder="Search Apps", ng-show="showAppSearch()", ng-model="appFilterText")
+      button.btn.btn-default.btn-icon-left(ng-click="createAppModal()")
+        i.fa.fa-plus
+        span New Application
+      button.btn.btn-default.push-right(ng-click="refreshApps()")
+        i.fa.fa-refresh
 
-    table.table.table-bordered
-      thead
-        th Name
-        th URL
-        th Created
-      tbody
-        tr(ng-repeat="app in applications | filter:{name: appFilterText}")
-          td
-            a(ng-href="/apps/{{app.appId}}") {{app.name}}
-            span.pull-right
-              a.btn.btn-default.push-right(ng-href="/apps/{{app.appId}}", tooltip="Manage App", tooltip-placement="bottom")
-                i.fa.fa-gear
-          td
-            span {{app.url}}
-            span.pull-right
-              a.btn.btn-default.push-right(target="_blank", ng-href="{{app.url}}", tooltip="Launch App", tooltip-placement="bottom")
-                i.fa.fa-external-link
+table.table.table-bordered
+  thead
+    th Name
+    th URL
+    th Created
+  tbody
+    tr(ng-repeat="app in applications | filter:{name: appFilterText}")
+      td
+        a(ng-href="/apps/{{app.appId}}") {{app.name}}
+        span.pull-right
+          a.btn.btn-default.push-right(ng-href="apps/{{app.appId}}", tooltip="Manage App", tooltip-placement="bottom")
+            i.fa.fa-gear
+      td
+        span {{app.url}}
+        span.pull-right
+          a.btn.btn-default.push-right(target="_blank", ng-href="{{app.url}}", tooltip="Launch App", tooltip-placement="bottom")
+            i.fa.fa-external-link
 
-          td {{app.created | date:'MMM dd, yyyy'}}
+      td {{app.created | date:'MMM dd, yyyy'}}
 
-        tr(ng-hide="applications.length")
-          td(colspan="3")
-            h4 No Applications
-
-  tab(heading="Members")
-    .row
-      .col-sm-6
-        h3 Members
-      .col-sm-6
-        .pull-right
-          button.btn.btn-default.btn-icon-left(ng-click="openMemberModal()", ng-show="organization.role=='admin'", ng-disabled="localInstance")
-            i.fa.fa-plus
-            span New Member
-          button.btn.btn-default.push-right(ng-click="refreshEvents()")
-            i.fa.fa-refresh
-
-    table.table.table-bordered
-      thead
-        th Username
-        th Role
-        th Joined
-      tbody
-        tr(ng-repeat="member in members")
-          td
-            img.avatar(ng-show="member.avatar", ng-src="{{member.avatar}}")
-            span {{member.username}}
-            span.pull-right(ng-show="organization.role=='admin'")
-              button.btn.btn-default(title="Edit", ng-click="openMemberModal(member)", ng-disabled="localInstance")
-                i.fa.fa-gear
-
-          td {{member.role | capitalize}}
-          td {{member.created | date:'MMM dd, yyyy'}}
-
-  tab(heading="Events", ng-show="false")
-    .row
-      .col-md-8
-        h3 Events
-      .col-md-4
-        .pull-right
-          button.btn.btn-default.btn-icon-rt.push-right(ng-click="refreshEvents()")
-            span Refresh
-            i.fa.fa-refresh
-
-    table.table.table-bordered
-      thead
-        th Time
-        th User
-        th Details
-      tbody
-        tr(ng-repeat="event in events")
-          td {{event.time}}
-          td {{event.username}}
-          td {{event.details}}
-        tr(ng-hide="events")
-          td(colspan="3")
-            h4 No Events
+    tr(ng-hide="applications.length")
+      td(colspan="3")
+        h4 No Applications
 
 script#createAppModal(type="text/ng-template")
   .modal-header
     h4 Create New Application
   .modal-body
     p.help-block Creating a new application is done with the yoke command line tool which you can install via npm:
-    cli-instruction(value="'npm install -g yoke-cli'")
-
-    p.help-block Before you create an app for the first time you need to login. You'll be prompted for your userId and secretKey which can be found on your <a href="/profile">profile settings</a>. This is a one time setup step. 
-    cli-instruction(value="'yoke login'")
+    cli-instruction(value="'npm install -g 4front/cli'")
 
     p.help-block You can create a new app from an existing single page codebase, or you can create one from scratch. If from scratch, run from the directory where your new app should get created. If existing, run at the root of the existing app code.
-    cli-instruction(value="'yoke create-app'")
+    cli-instruction(value="'4front create-app'")
 
   .modal-footer
     button.btn.btn-default(ng-click="$close('close')") Close
-
-
-script(type="text/ng-template", id="githubUserTypeahead.html")
-  a
-    img.avatar(ng-src="{{match.model.avatar_url}}")
-    //- span(bind-html-unsafe="match.login | json | typeaheadHighlight:query")
-    span(bind-html-unsafe="match.model.login | typeaheadHighlight:query")
-
-script(type="text/ng-template", id="orgMemberModal.jade")
-  .modal-header
-    h3.modal-title(ng-hide="orgMember") New Organization Member
-    h3.modal-title(ng-show="orgMember") Manage Organization Member
-  .modal-body
-    .alert.alert-danger(ng-show="error") {{error}}
-    .row
-      .col-md-8
-        form
-          .form-group(ng-show="orgMember.new", style="position:relative")
-            label.control-label(for="username") GitHub User
-            input.form-control(type='text', placeholder="Name or Username", ng-model="selectedUser", typeahead="user as user for user in searchUsers($viewValue)", typeahead-loading="searchingUsers", typeahead-min-length="3", typeahead-template-url="githubUserTypeahead.html", typeahead-input-formatter="formatInput($model)", typeahed-editable=false, typeahead-on-select="userSelected($item, $model, $label)")
-            i.fa.fa-spinner.fa-spin.fa-2x(ng-show="searchingUsers", style="position:absolute; right:5px; bottom:4px; color:gray")
-
-          .form-group
-            label.control-label(for="memberRole") Role
-            div
-              label.radio-inline(ng-repeat="role in roles")
-                input(type="radio", name="memberRole", ng-click="setRole(role)", ng-checked="selectedRole(role)", ng-disabled="disableModifications")
-                span {{role | capitalize}}
-
-      .col-md-3
-        div(ng-show="selectedUser")
-          img.img-responsive.img-rounded(ng-src="{{selectedUser.avatar_url}}")
-          label.form-label {{selectedUser.login}}
-
-  .modal-footer
-    div(ng-show="showRemoveConfirm")
-      strong(style="margin-right:25px") Remove this member from the org?
-      button.btn.btn-danger(ng-click="removeMember()") Yes
-      button.btn.btn-default(ng-click="showRemoveConfirm=false") Cancel
-    .row(ng-hide="showRemoveConfirm")
-      .col-md-6.align-left
-        button.btn.btn-default.btn-icon-left(ng-hide="orgMember.new", ng-click="showRemoveConfirm=true" ng-disabled="disableModifications")
-          i.fa.fa-remove
-          span Remove
-      .col-md-6
-        button.btn.btn-primary(type="button", ng-click="saveMember()", ng-disabled="memberSaving")
-          span Save
-
-        button.btn.btn-default(type="button", ng-click="modalInstance.dismiss('cancel')") Cancel

@@ -16,30 +16,6 @@ angular.module('controllers').controller('OrgHomeCtrl', function($scope, $rootSc
   else
     loadOrganization($rootScope.organization);
 
-  $scope.openMemberModal = function(member) {
-    var modalInstance = $modal.open({
-      templateUrl: 'orgMemberModal.jade',
-      controller: 'OrgMemberCtrl',
-      resolve: {
-        member: function () {
-          return member;
-        }
-      }
-    });
-
-    modalInstance.result.then(function(member) {
-      if (member.removed === true)
-        $scope.members = _.reject($scope.members, {userId: member.userId});
-      else {
-        var existingMember = _.find($scope.members, {userId: member.userId});
-        if (existingMember)
-          _.extend(existingMember, member);
-        else
-          $scope.members.push(member);
-      }
-    });
-  };
-
   $scope.showAppSearch = function() {
     return $scope.applications && $scope.applications.length > 5;
   };
@@ -62,16 +38,16 @@ angular.module('controllers').controller('OrgHomeCtrl', function($scope, $rootSc
     var promises = [];
     if (org) {
       promises.push(Resources.Organization.apps({orgId: org.orgId}).$promise);
-      promises.push(Resources.Organization.members({orgId: org.orgId}).$promise);
-      // promises.push(Resource.Organization.events().$promise);
+      // promises.push(Resources.Organization.members({orgId: org.orgId}).$promise);
+      promises.push(Resource.Organization.events().$promise);
     }
     else
       promises.push(Resources.Profile.apps().$promise);
 
     $q.all(promises).then(function(results) {
       $scope.applications = results[0];
-      $scope.members = results[1];
-      $scope.events = results[2];
+      // $scope.members = results[1];
+      // $scope.events = results[2];
       $scope.orgLoading = false;
       $cookies.selectedOrgId = org.orgId;
     }, function(err) {
@@ -80,24 +56,24 @@ angular.module('controllers').controller('OrgHomeCtrl', function($scope, $rootSc
     });
   }
 
-  function activateOrg() {
-    var plan = $location.search().plan;
-
-    // Invoke convert API call to finalize org creation.
-    // $scope.orgActivatedMessage = true;
-    $scope.orgLoading = true;
-    return Resources.Organization.activate({orgId: $rootScope.organization.orgId, plan: plan}, function(org) {
-      // Update the org in memory with the activated orgs attributes
-      _.extend($rootScope.organization, org);
-      $scope.orgActivated = true;
-    }, function(resp) {
-      $scope.orgLoading = false;
-      if (resp.data.error === 'invalidPlanName') {
-        $scope.error = "Could not activate the organization. The plan name is not valid.";
-      }
-      else {
-        $scope.error = "Could not activate the organization.";
-      }
-    }).$promise;
-  }
+  // function activateOrg() {
+  //   var plan = $location.search().plan;
+  //
+  //   // Invoke convert API call to finalize org creation.
+  //   // $scope.orgActivatedMessage = true;
+  //   $scope.orgLoading = true;
+  //   return Resources.Organization.activate({orgId: $rootScope.organization.orgId, plan: plan}, function(org) {
+  //     // Update the org in memory with the activated orgs attributes
+  //     _.extend($rootScope.organization, org);
+  //     $scope.orgActivated = true;
+  //   }, function(resp) {
+  //     $scope.orgLoading = false;
+  //     if (resp.data.error === 'invalidPlanName') {
+  //       $scope.error = "Could not activate the organization. The plan name is not valid.";
+  //     }
+  //     else {
+  //       $scope.error = "Could not activate the organization.";
+  //     }
+  //   }).$promise;
+  // }
 });

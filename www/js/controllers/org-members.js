@@ -65,6 +65,30 @@ angular.module('controllers').controller('OrgMemberCtrl', function($scope, $root
     }
   };
 
+  $scope.openMemberModal = function(member) {
+    var modalInstance = $modal.open({
+      templateUrl: 'orgMemberModal.jade',
+      controller: 'OrgMemberCtrl',
+      resolve: {
+        member: function () {
+          return member;
+        }
+      }
+    });
+
+    modalInstance.result.then(function(member) {
+      if (member.removed === true)
+        $scope.members = _.reject($scope.members, {userId: member.userId});
+      else {
+        var existingMember = _.find($scope.members, {userId: member.userId});
+        if (existingMember)
+          _.extend(existingMember, member);
+        else
+          $scope.members.push(member);
+      }
+    });
+  };
+
   $scope.removeMember = function() {
     Resources.OrgMember.delete({orgId: $rootScope.organization.orgId, userId: member.userId}, function() {
       member.removed = true;

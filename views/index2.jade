@@ -37,19 +37,20 @@ html(lang='en')
           h3 Organizations
           ul.nav.nav-sidebar
             li(ng-repeat="org in organizations", ng-class="{active: org.orgId == organization.orgId}") 
-              a(nav-href="/orgs/{{org.orgId}}")
+              a(nav-href="orgs/{{org.orgId}}")
                 span {{org.name}}
             
         .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
           //- top menu
-          ul(ng-show="navMode=='org' && organization", ng-cloak)
-            li.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
+          ul.nav.nav-pills(ng-show="navMode=='org' && organization", ng-cloak)
+            li(ng-class="{active: }", nav-href="orgs/{{organization.orgId}}")
               i.fa.fa-home.fa-lg
               span Apps
 
-            a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
-              i.fa.fa-home.fa-lg
-              span Members
+            li(ng-class="{active:}")
+              a.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
+                i.fa.fa-home.fa-lg
+                span Members
                 
             a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
               i.fa.fa-gear.fa-bar-chart
