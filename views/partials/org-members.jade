@@ -9,7 +9,7 @@ p.load-spinner(ng-show="orgLoading")
     h3 Members
   .col-sm-6
     .pull-right
-      button.btn.btn-default.btn-icon-left(ng-click="openMemberModal()", ng-show="organization.role=='admin'", ng-disabled="localInstance")
+      button.btn.btn-default.btn-icon-left(ng-click="openMemberModal()", ng-show="organization.role=='admin'")
         i.fa.fa-plus
         span New Member
       button.btn.btn-default.push-right(ng-click="refreshEvents()")
@@ -26,44 +26,30 @@ table.table.table-bordered
         img.avatar(ng-show="member.avatar", ng-src="{{member.avatar}}")
         span {{member.username}}
         span.pull-right(ng-show="organization.role=='admin'")
-          button.btn.btn-default(title="Edit", ng-click="openMemberModal(member)", ng-disabled="localInstance")
+          button.btn.btn-default(title="Edit", ng-click="openMemberModal(member)")
             i.fa.fa-gear
 
       td {{member.role | capitalize}}
       td {{member.created | date:'MMM dd, yyyy'}}
 
-script(type="text/ng-template", id="githubUserTypeahead.html")
-  a
-    img.avatar(ng-src="{{match.model.avatar_url}}")
-    //- span(bind-html-unsafe="match.login | json | typeaheadHighlight:query")
-    span(bind-html-unsafe="match.model.login | typeaheadHighlight:query")
-
-script(type="text/ng-template", id="orgMemberModal.jade")
+script(type="text/ng-template", id="orgMemberModal")
   .modal-header
     h3.modal-title(ng-hide="orgMember") New Organization Member
     h3.modal-title(ng-show="orgMember") Manage Organization Member
   .modal-body
-    .alert.alert-danger(ng-show="error") {{error}}
-    .row
-      .col-md-8
-        form
-          .form-group(ng-show="orgMember.new", style="position:relative")
-            label.control-label(for="username") GitHub User
-            input.form-control(type='text', placeholder="Name or Username", ng-model="selectedUser", typeahead="user as user for user in searchUsers($viewValue)", typeahead-loading="searchingUsers", typeahead-min-length="3", typeahead-template-url="githubUserTypeahead.html", typeahead-input-formatter="formatInput($model)", typeahed-editable=false, typeahead-on-select="userSelected($item, $model, $label)")
-            i.fa.fa-spinner.fa-spin.fa-2x(ng-show="searchingUsers", style="position:absolute; right:5px; bottom:4px; color:gray")
-
-          .form-group
-            label.control-label(for="memberRole") Role
-            div
-              label.radio-inline(ng-repeat="role in roles")
-                input(type="radio", name="memberRole", ng-click="setRole(role)", ng-checked="selectedRole(role)", ng-disabled="disableModifications")
-                span {{role | capitalize}}
-
-      .col-md-3
-        div(ng-show="selectedUser")
-          img.img-responsive.img-rounded(ng-src="{{selectedUser.avatar_url}}")
-          label.form-label {{selectedUser.login}}
-
+    .alert.alert-danger(ng-show="modalError") {{modalError}}
+    form
+      .form-group 
+        label(for="username") Username
+        input.form-control(for="username", placeholder="Username", ng-model="$parent.orgMember.username", ng-disabled="!$parent.orgMember.new")
+        
+      .form-group
+        label.control-label(for="memberRole") Role
+        div
+          label.radio-inline(ng-repeat="role in $parent.roles")
+            input(type="radio", name="memberRole", value="{{role}}", ng-model="$parent.orgMember.role", ng-disabled="$parent.orgMember.self")
+            span {{role | capitalize}}
+            
   .modal-footer
     div(ng-show="showRemoveConfirm")
       strong(style="margin-right:25px") Remove this member from the org?
@@ -71,11 +57,11 @@ script(type="text/ng-template", id="orgMemberModal.jade")
       button.btn.btn-default(ng-click="showRemoveConfirm=false") Cancel
     .row(ng-hide="showRemoveConfirm")
       .col-md-6.align-left
-        button.btn.btn-default.btn-icon-left(ng-hide="orgMember.new", ng-click="showRemoveConfirm=true" ng-disabled="disableModifications")
+        button.btn.btn-default.btn-icon-left(ng-hide="$parent.orgMember.new || $parent.orgMember.self", ng-click="showRemoveConfirm=true")
           i.fa.fa-remove
           span Remove
       .col-md-6
-        button.btn.btn-primary(type="button", ng-click="saveMember()", ng-disabled="memberSaving")
+        button.btn.btn-primary(type="button", ng-click="saveMember()", ng-disabled="$parent.orgMember.self || $parent.memberSaving")
           span Save
 
-        button.btn.btn-default(type="button", ng-click="modalInstance.dismiss('cancel')") Cancel
+        button.btn.btn-default(type="button", ng-click="$close()") Cancel

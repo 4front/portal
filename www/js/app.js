@@ -6,7 +6,8 @@ angular.module('filters', []);
 angular.module('services').value('Config', __config__);
 
 angular.module('portal', ['ngRoute', 'ngResource', 'ngCookies',
-  'ui.bootstrap', 'duScroll', 'services', 'controllers', 'directives', 'filters']);
+  'ui.bootstrap', 'duScroll', 'services', 'controllers',
+  'directives', 'filters']);
 
 angular.module('portal').config(function ($routeProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
   // Use html5 pushState for route navigation
@@ -43,6 +44,11 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
     when('/orgs/:orgId', {
       templateUrl: 'views/partials/org-home',
       controller: 'OrgHomeCtrl',
+      resolve: routeResolve
+    }).
+    when('/orgs/:orgId/members', {
+      templateUrl: 'views/partials/org-members',
+      controller: 'OrgMemberCtrl',
       resolve: routeResolve
     }).
     when('/orgs/:orgId/settings', {
@@ -99,6 +105,7 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
 
 angular.module('portal').run(function($rootScope, $location, $log, $cookies, Config) {
   // Store the user's organizations on the rootScope
+  $rootScope.user = Config.user;
   $rootScope.organizations = Config.user.orgs;
 
   if ($rootScope.organizations.length) {

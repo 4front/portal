@@ -14,7 +14,7 @@ html(lang='en')
             img(src='//s3-us-west-2.amazonaws.com/4front-media/4front-logo.png', alt='4front')
         
         #navbar.navbar-collapse.collapse
-          ul.nav.navbar-nav.navbar-right
+          ul.nav.navbar-nav.navbar-right(style="margin-right:0px")
             li
               a(href='#') Dashboard
             li
@@ -25,9 +25,7 @@ html(lang='en')
               a(href='#') Help
             li
               a(href='#{basePath}/logout', target="_self") Logout
-              
-          form.navbar-form.navbar-right
-            input.form-control(type='text', placeholder='Search...')
+          
     .container-fluid
       .row
         .col-sm-3.col-md-2.sidebar
@@ -42,29 +40,38 @@ html(lang='en')
             
         .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
           //- top menu
-          ul.nav.nav-pills(ng-show="navMode=='org' && organization", ng-cloak)
-            li(ng-class="{active: }", nav-href="orgs/{{organization.orgId}}")
-              i.fa.fa-home.fa-lg
-              span Apps
-
-            li(ng-class="{active:}")
+          ul.nav.nav-pills(ng-show="navMode=='org' && organization", ng-cloak, style="margin-bottom: 25px;")
+            li(ng-class="{active:subNav=='apps'}")
               a.btn-icon-left(nav-href="orgs/{{organization.orgId}}")
+                i.fa.fa-home.fa-lg
+                span Apps
+
+            li(ng-class="{active:subNav=='members'}")
+              a.btn-icon-left(nav-href="orgs/{{organization.orgId}}/members")
                 i.fa.fa-home.fa-lg
                 span Members
                 
-            a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
-              i.fa.fa-gear.fa-bar-chart
-              span Usage
-              
-              a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
+            li(ng-class="{active:subNav=='usage'}")
+              a.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
                 i.fa.fa-gear.fa-bar-chart
-                span Activity
+                span Usage
+              
+              //- a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/usage")
+              //-   i.fa.fa-gear.fa-bar-chart
+              //-   span Activity
 
-            a.list-group-item.btn-icon-left(nav-href="orgs/{{organization.orgId}}/settings")
-              i.fa.fa-gear.fa-lg
-              span Settings
+            li(ng-class="{active:subNav=='usage'}")
+              a.btn-icon-left(nav-href="orgs/{{organization.orgId}}/settings")
+                i.fa.fa-gear.fa-lg
+                span Settings
 
         
+          div.page-loading(ng-show="pageLoading")
+            i.fa.fa-spinner.fa-spin 
+            span Loading 
+            
+          div.alert.alert-danger.ng-cloak(ng-show="pageError") {{pageError}}
+            
           .ng-view
             //- Main view 
                   

@@ -139,6 +139,7 @@ h3,
   height: 50px;
 }
 .navbar .navbar-brand {
+  margin-left: 0 !important;
   padding: 5px;
 }
 .navbar .navbar-brand img {

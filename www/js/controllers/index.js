@@ -1,10 +1,6 @@
 angular.module('controllers').controller('IndexCtrl', function($scope, $rootScope, $location, $log, $cookies, Context) {
   'use strict';
 
-  // If the user's profile is not complete, redirect to the profile page
-  // if ($rootScope.profile.complete !== true)
-  //   return $location.path('/profile');
-
   if ($rootScope.defaultOrg) {
     // Redirect to the org dashboard
     $log.debug("Redirecting to default org " + $rootScope.defaultOrg.name);

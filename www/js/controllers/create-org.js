@@ -3,19 +3,6 @@ angular.module('controllers').controller('CreateOrgCtrl', function($scope, $root
 
   $scope.newOrg = new Resources.Organization();
 
-  // Load the plans
-  $scope.paidPlans = Config.paidPlans;
-  if ($scope.paidPlans) {
-    $scope.newOrg.plan = 'trial';
-    $scope.selectedPlan = $scope.plans[3];
-  }
-
-  $scope.choosePlan = function(plan) {
-    // $scope.newOrg.monthlyRate = plan.price;
-    // $scope.newOrg.plan = plan.code;
-    $scope.selectedPlan = plan;
-  };
-
   $scope.submit = function() {
     // Validate the org.
     if (_.isEmpty($scope.newOrg.name)) {
