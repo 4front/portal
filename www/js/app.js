@@ -106,22 +106,7 @@ angular.module('portal').config(function ($routeProvider, $locationProvider, $ht
 angular.module('portal').run(function($rootScope, $location, $log, $cookies, Config) {
   // Store the user's organizations on the rootScope
   $rootScope.user = Config.user;
-  $rootScope.organizations = Config.user.orgs;
-
-  if ($rootScope.organizations.length) {
-    var defaultOrg = null;
-    if ($cookies.selectedOrgId)
-      $rootScope.defaultOrg = _.find($rootScope.organizations, {orgId: $cookies.selectedOrgId});
-
-    // If there was no org specified in the cookie, use the first org
-    if (!defaultOrg)
-      $rootScope.defaultOrg = _.first($rootScope.organizations);
-
-    // Store the orgId in the cookie
-    if ($rootScope.defaultOrg)
-      $cookies.selectedOrgId = $rootScope.defaultOrg.orgId;
-  }
-
+  
   // $rootScope.$on('$routeChangeError', function(event, current, previous, eventObj) {
   //   $log.error("Route change error", eventObj);
   //

@@ -37,6 +37,10 @@ html(lang='en')
             li(ng-repeat="org in organizations", ng-class="{active: org.orgId == organization.orgId}") 
               a(nav-href="orgs/{{org.orgId}}")
                 span {{org.name}}
+                
+          a(ng-href="orgs/create") 
+            i.fa.fa-plus
+            span New Organization
             
         .col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
           //- top menu
@@ -83,7 +87,6 @@ html(lang='en')
     script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-cookies.min.js")
 
     div(data-build="debug")
-      script(src='node_modules/angular-cookies/angular-cookies.js')
       script(src='node_modules/angular-scroll/angular-scroll.js')
       script(src='node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js')
       script(data-src-expand='js/**/*.js')

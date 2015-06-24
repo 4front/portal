@@ -51,7 +51,7 @@ angular.module('controllers').controller('OrgMemberCtrl', function(
   };
 
   $scope.removeMember = function() {
-    Resources.OrgMember.delete({orgId: $rootScope.organization.orgId, userId: member.userId}, function() {
+    Resources.OrgMember.delete({orgId: $rootScope.organization.orgId, userId: $scope.orgMember.userId}, function() {
       $scope.members = _.reject($scope.members, {userId: $scope.orgMember.userId});
       $scope.orgMember = null;
       $scope.memberModal.close();
@@ -63,10 +63,6 @@ angular.module('controllers').controller('OrgMemberCtrl', function(
 
   function createMember() {
     $scope.memberSaving = true;
-    _.extend($scope.orgMember, {
-      providerUserId: $scope.orgMember.username,
-      provider: 'ldap'
-    });
 
     Resources.OrgMember.save($scope.orgMember, function(member) {
       // Tack the username and avatar back onto the member.

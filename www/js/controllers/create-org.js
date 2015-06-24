@@ -12,9 +12,12 @@ angular.module('controllers').controller('CreateOrgCtrl', function($scope, $root
 
     $log.info("Saving new organization");
     $scope.orgSaving = true;
+
     $scope.newOrg.$save(function(org) {
       delete $scope.error;
       $log.info("Org created");
+
+      org.role = 'admin';
 
       // Add this org to the list in memory and set it as the current org.
       if (!_.isArray($rootScope.organizations))

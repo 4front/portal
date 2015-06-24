@@ -4,8 +4,8 @@ angular.module('controllers').controller('OrgHomeCtrl', function($scope, $rootSc
   'use strict';
 
   // $rootScope.organization = _.find($rootScope.organizations, {orgId: $routeParams.orgId});
-  if (!$rootScope.organization)
-    return $location.path('/');
+  // if (!$rootScope.organization)
+  //   return $location.path('/');
 
   $scope.localInstance = Config.localInstance;
   $rootScope.subNav = 'apps';

@@ -1,5 +1,5 @@
 angular.module('services').factory('Resources', function($resource, $location, $window, Config) {
-  
+
   var resources = {
     App: $resource(Config.apiUrl + "/apps/:appId/:subAction", { appId: '@appId'}, {
       update: {method: 'PUT'},
@@ -24,6 +24,7 @@ angular.module('services').factory('Resources', function($resource, $location, $
       find: {method: 'GET', isArray: false}
     }),
     Profile: $resource(Config.apiUrl + "/profile/:resource", {}, {
+      orgs: {params: {resource: 'orgs'}, method: 'GET', isArray: true},
       apps: {params: {resource: 'apps'}, method: 'GET', isArray: true}
     }),
     Organization: $resource(Config.apiUrl + '/orgs/:orgId/:resource', {orgId: '@orgId'}, {
