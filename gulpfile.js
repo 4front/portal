@@ -23,7 +23,6 @@ gulp.task('clean', function(cb) {
 gulp.task('buildVendorJs', function() {
   var vendor = [
     // Add any other vendors scripts here
-    'node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.min.js',
     'node_modules/angular-scroll/angular-scroll.min.js'
   ];
 
