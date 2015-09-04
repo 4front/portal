@@ -1,40 +1,24 @@
 // import superagent from 'superagent';
 var contextData = window.__config__;
 
-export default {
-  // login(email, pass, cb) {
-  //   cb = arguments[arguments.length - 1];
-  //   if (localStorage.token) {
-  //     if (cb) cb(true);
-  //     this.onChange(true);
-  //     return;
-  //   }
-  //   pretendRequest(email, pass, (res) => {
-  //     if (res.authenticated) {
-  //       localStorage.token = res.token;
-  //       if (cb) cb(true);
-  //       this.onChange(true);
-  //     } else {
-  //       if (cb) cb(false);
-  //       this.onChange(false);
-  //     }
-  //   });
-  // },
+let _exports = {
+  setUser(user) {
+    contextData.user = user;
+  },
 
-  // getToken: function () {
-  //   return localStorage.token;
-  // },
+  setOrgs(orgs) {
+    contextData.orgs = orgs;
+  },
 
-  // logout: function(cb) {
-  //   // delete localStorage.token;
-  //   if (cb) cb();
-  //   this.onChange(false);
-  // },
-  //
-
-  loggedIn: function() {
+  loggedIn() {
     return contextData.user || false;
   },
 
-  onLoggedIn: function() {}
+  user: contextData.user,
+
+  getOrgs() {
+    return contextData.orgs;
+  }
 };
+
+export default _exports;

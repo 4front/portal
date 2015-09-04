@@ -1,6 +1,10 @@
 import React from 'react';
 import ErrorMessage from './ErrorMessage';
-import request from 'superagent';
+import superagent from 'superagent';
+import agentPromise from 'superagent-promise';
+import context from '../lib/context';
+
+const request = agentPromise(superagent, Promise);
 
 const LOGO_IMAGE = 'https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png';
 
@@ -22,25 +26,19 @@ export default class Login extends React.Component {
 
     var username = this.refs.username.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
+
+    // I don't get this line? How does the router get set to this.context?
     var { router } = this.context;
 
     event.preventDefault();
 
-    request
-      .post('/portal/login')
+    request.post('/portal/login')
       .send({
         username: username,
         password: password
       })
-      .end((err, res) => {
-        if (err) {
-          return this.setState({
-            loggingIn: false,
-            loginError: err
-          });
-        }
-
-        // TODO: Change some global state by assigning the user
+      .then((res) => {
+        context.setUser(res.body);
 
         var nextPath = router.getCurrentQuery().nextPath;
         if (nextPath) {
@@ -48,11 +46,13 @@ export default class Login extends React.Component {
         } else {
           router.replaceWith('/');
         }
-
-        console.log(res.user);
+      })
+      .catch((err) => {
         this.setState({
           loggingIn: false
         });
+
+        console.error(err);
       });
   }
 

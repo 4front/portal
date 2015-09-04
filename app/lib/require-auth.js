@@ -8,7 +8,7 @@ export default (Component) => {
     static willTransitionTo(transition) {
       console.debug("checking auth state");
       if (!context.loggedIn()) {
-        transition.redirect('/login');
+        transition.redirect('login', {}, {nextPath: transition.path});
       }
     }
 

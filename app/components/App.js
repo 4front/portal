@@ -16,15 +16,14 @@ class Shell extends React.Component {
 }
 
 var routes = (
-  <Route path="/" handler={Shell}>
-    <Route path="/login" handler={Login} />
+  <Route path="/portal" handler={Shell}>
+    <Route name="login" path="/portal/login" handler={Login} />
     <Route handler={MainLayout}>
-      <DefaultRoute handler={Dashboard} />
-      <Route path="/dashboard" handler={Dashboard}/>
+      <DefaultRoute name="dashboard" handler={Dashboard} />
     </Route>
   </Route>
 );
 
-Router.run(routes, function(Handler) {
+Router.run(routes, Router.HistoryLocation, function(Handler) {
   React.render(<Handler/>, document.body);
 });

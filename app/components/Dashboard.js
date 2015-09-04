@@ -8,6 +8,6 @@ export default requireAuth(class Dashboard extends React.Component {
   }
 
   render() {
-    return <div>Dashboard</div>;
+    return <h2>Dashboard</h2>;
   }
 })
