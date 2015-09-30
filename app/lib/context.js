@@ -14,7 +14,9 @@ let _exports = {
     return contextData.user || false;
   },
 
-  user: contextData.user,
+  user() {
+    return contextData.user;
+  },
 
   getOrgs() {
     return contextData.orgs;

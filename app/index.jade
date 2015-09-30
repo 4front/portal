@@ -22,5 +22,7 @@ html(lang='en')
     link(rel='stylesheet', href='dist/app.min.css')
     
   body
-    script(data-build="debug" src="dist/bundle.js")
+    script(data-build="debug" src="http://localhost:8080/assets/vendor-bundle.js")
+    script(data-build="debug" src="http://localhost:8080/assets/app-bundle.js")
+      
     script(data-build="release" src="dist/bundle.min.js")

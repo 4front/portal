@@ -1,10 +1,8 @@
 import React from 'react';
-import ErrorMessage from './ErrorMessage';
-import superagent from 'superagent';
-import agentPromise from 'superagent-promise';
-import context from '../lib/context';
-
-const request = agentPromise(superagent, Promise);
+import Alert from './Alert';
+import {Router} from 'react-router';
+import globalState from '../lib/global-state';
+import request from '../lib/request';
 
 const LOGO_IMAGE = 'https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png';
 
@@ -20,6 +18,8 @@ export default class Login extends React.Component {
   }
 
   submit(event) {
+    event.preventDefault();
+
     this.setState({
       loggingIn: true
     });
@@ -27,10 +27,8 @@ export default class Login extends React.Component {
     var username = this.refs.username.getDOMNode().value;
     var password = this.refs.password.getDOMNode().value;
 
-    // I don't get this line? How does the router get set to this.context?
-    var { router } = this.context;
-
-    event.preventDefault();
+    var history = this.context.history;
+    var { location } = this.props;
 
     request.post('/portal/login')
       .send({
@@ -38,63 +36,91 @@ export default class Login extends React.Component {
         password: password
       })
       .then((res) => {
-        context.setUser(res.body);
+        globalState.user = res.body;
 
-        var nextPath = router.getCurrentQuery().nextPath;
-        if (nextPath) {
-          router.replaceWith(nextPath);
+        // Redirect to whatever URL the user was originally trying to access
+        if (location.state && location.state.nextPathname) {
+          history.replaceState(null, location.state.nextPathname);
         } else {
-          router.replaceWith('/');
+          history.replaceState(null, '/');
         }
       })
       .catch((err) => {
+        var errorCode;
+        if (err.response && err.response.body)
+          errorCode = err.response.body.code;
+        else
+          errorCode = 'unknown';
+
         this.setState({
+          errorCode: errorCode,
           loggingIn: false
         });
-
-        console.error(err);
       });
   }
 
+  renderLoginError() {
+   if (!this.state.errorCode)
+     return null;
+
+    var message = null;
+    switch (this.state.errorCode) {
+    case 'invalidCredentials':
+      message = 'Invalid credentials';
+      break;
+    case 'missingUsernameOrPassword':
+      message = 'Please enter your username and password';
+      break;
+    default:
+      message = 'Unknown sign-in error';
+      break;
+    }
+
+     return <Alert type="danger"><strong>{message}</strong></Alert>;
+   }
+
   render() {
+    var loginIcon = `fa ${this.state.loggingIn ? 'fa-circle-o-notch fa-spin' : 'fa-sign-in'}`;
+
     return (
       <div className="login">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-3"></div>
-            <div className="col-md-6">
-              <img className="logo" src={LOGO_IMAGE}/>
-              <ErrorMessage message={this.state.loginError}/>
-              <form onSubmit={this.submit.bind(this)} noValidate={true}>
-                <div className="form-group">
-                  <label className="sr-only" htmlFor="username">Username</label>
-                  <input className="form-control" autoCapitalize={false}
-                    ref="username" placeholder="Username" autoFocus
-                    onChange={(event)=> {this.state.username = event.target.value}}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label className="sr-only" htmlFor="password">Password</label>
-                  <input className="form-control" type="password"
-                    ref="password" placeholder="Password"
-                    onChange={(event)=> {this.state.password = event.target.value}}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <button className="btn btn-primary btn-block" type="submit">{"Sign-In"}</button>
-                </div>
-              </form>
-            </div>
-            <div className="col-md-3"></div>
-          </div>
+        <div className="logo">
+          <img src={LOGO_IMAGE}/>
         </div>
+        {this.renderLoginError()}
+        <form onSubmit={this.submit.bind(this)} noValidate>
+          <div className="form-group">
+            <label className="sr-only" htmlFor="username">Username</label>
+            <input className="form-control" autoCapitalize={false}
+              ref="username" placeholder="Username" autoFocus
+              onChange={(event)=> {this.state.username = event.target.value}}
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="sr-only" htmlFor="password">Password</label>
+            <input className="form-control" type="password"
+              ref="password" placeholder="Password"
+              onChange={(event)=> {this.state.password = event.target.value}}
+            />
+          </div>
+
+          <div className="form-group">
+            <button className="btn btn-primary btn-block" type="submit">
+              <i className={loginIcon} style={{marginRight: 10}}/>
+              <span>Sign-In</span>
+            </button>
+          </div>
+        </form>
       </div>
     );
   }
 }
 
 Login.contextTypes = {
-  router: React.PropTypes.func
+  history: Router.propTypes.history
+};
+
+Login.propTypes = {
+  location: React.PropTypes.object
 };

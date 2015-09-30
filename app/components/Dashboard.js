@@ -1,7 +1,6 @@
 import React from 'react';
-import requireAuth from '../lib/require-auth';
 
-export default requireAuth(class Dashboard extends React.Component {
+export default class Dashboard extends React.Component {
   constructor() {
     console.debug("Dashboard");
     super();
@@ -10,4 +9,4 @@ export default requireAuth(class Dashboard extends React.Component {
   render() {
     return <h2>Dashboard</h2>;
   }
-})
+}
