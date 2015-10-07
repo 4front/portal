@@ -36,7 +36,6 @@ export default class AppLayout extends React.Component {
     request.get(`/api/apps/${props.params.appId}`)
       .set('X-Access-Token', globalState.user.jwt.token)
       .end((err, resp) => {
-        // debugger;
         if (err) {
           if (resp.body.code === 'appNotFound') {
             this.setState({
@@ -53,6 +52,7 @@ export default class AppLayout extends React.Component {
 
         this.setState({
           app: resp.body,
+          accessDenied: false,
           loading: false
         });
       });
@@ -61,7 +61,9 @@ export default class AppLayout extends React.Component {
   renderMenuItem(menuItem) {
     return (
       <li key={menuItem.path}>
-        <Link to={`/apps/${this.props.params.appId}${menuItem.path}`}>{menuItem.label}</Link>
+        <Link to={`/apps/${this.props.params.appId}${menuItem.path}`} activeClassName="active">
+          {menuItem.label}
+        </Link>
       </li>
     );
   }

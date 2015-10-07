@@ -29,14 +29,17 @@ export default class OrgLayout extends React.Component {
     }
 
     this.setState({
-      org: currentOrg
+      org: currentOrg,
+      accessDenied: false
     });
   }
 
   renderMenuItem(menuItem) {
     return (
       <li key={menuItem.path}>
-        <Link to={`/orgs/${this.props.params.orgId}${menuItem.path}`}>{menuItem.label}</Link>
+        <Link to={`/orgs/${this.props.params.orgId}${menuItem.path}`} activeClassName="active">
+          {menuItem.label}
+        </Link>
       </li>
     );
   }
