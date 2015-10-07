@@ -1,7 +1,8 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 // var minifyHtml = require("gulp-minify-html");
-var concat = require("gulp-concat");
+var concat = require('gulp-concat');
+// var rename = require('gulp-rename');
 // var uglify = require("gulp-uglify");
 // var minifyCss = require('gulp-minify-css');
 var stylus = require('gulp-stylus');
@@ -10,7 +11,7 @@ var runSequence = require('run-sequence');
 var del = require('del');
 var path = require('path');
 var webpack = require('webpack');
-var WebpackDevServer = require("webpack-dev-server");
+var WebpackDevServer = require('webpack-dev-server');
 // var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var webpackConfig = buildWebPackConfig();
@@ -18,18 +19,18 @@ var webpackConfig = buildWebPackConfig();
 gulp.task('default', ['build', 'watch']);
 
 gulp.task('clean', function(cb) {
-  del(['./www/dist'], cb);
+  del(['./dist'], cb);
 });
 
 gulp.task('stylus', function() {
-  gutil.log("compiling stylus");
+  gutil.log('compiling stylus');
   gulp.src('./app/stylus/*.styl')
      .pipe(stylus({
        use: nib(),
        compress: true
      }))
      .pipe(concat('app.min.css'))
-     .pipe(gulp.dest('./www/dist'));
+     .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('webpack', function(done) {
@@ -51,7 +52,7 @@ gulp.task('webpack', function(done) {
   });
 });
 
-gulp.task("webpack-dev-server", function() {
+gulp.task('webpack-dev-server', function() {
 	// modify some webpack config options
 	var myConfig = Object.create(webpackConfig);
 	myConfig.devtool = "eval-source-map";
@@ -63,7 +64,7 @@ gulp.task("webpack-dev-server", function() {
 		stats: {
 			colors: true
 		}
-	}).listen(8080, "localhost", function(err) {
+	}).listen(8080, 'localhost', function(err) {
 		if(err) throw new gutil.PluginError("webpack-dev-server", err);
 		gutil.log("[webpack-dev-server]");
 	});

@@ -24,11 +24,8 @@ export default class Login extends React.Component {
       loggingIn: true
     });
 
-    var username = this.refs.username.getDOMNode().value;
-    var password = this.refs.password.getDOMNode().value;
-
-    var history = this.context.history;
-    var { location } = this.props;
+    const username = this.refs.username.getDOMNode().value;
+    const password = this.refs.password.getDOMNode().value;
 
     request.post('/portal/login')
       .send({
@@ -39,18 +36,19 @@ export default class Login extends React.Component {
         globalState.user = res.body;
 
         // Redirect to whatever URL the user was originally trying to access
-        if (location.state && location.state.nextPathname) {
-          history.replaceState(null, location.state.nextPathname);
+        if (this.props.location.state && this.props.location.state.nextPathname) {
+          this.context.history.replaceState(null, location.state.nextPathname);
         } else {
-          history.replaceState(null, '/');
+          this.context.history.replaceState(null, '/');
         }
       })
       .catch((err) => {
-        var errorCode;
-        if (err.response && err.response.body)
+        let errorCode;
+        if (err.response && err.response.body) {
           errorCode = err.response.body.code;
-        else
+        } else {
           errorCode = 'unknown';
+        }
 
         this.setState({
           errorCode: errorCode,
@@ -60,10 +58,9 @@ export default class Login extends React.Component {
   }
 
   renderLoginError() {
-   if (!this.state.errorCode)
-     return null;
+    if (!this.state.errorCode) return null;
 
-    var message = null;
+    let message = null;
     switch (this.state.errorCode) {
     case 'invalidCredentials':
       message = 'Invalid credentials';
@@ -76,11 +73,11 @@ export default class Login extends React.Component {
       break;
     }
 
-     return <Alert type="danger"><strong>{message}</strong></Alert>;
-   }
+    return <Alert type="danger"><strong>{message}</strong></Alert>;
+  }
 
   render() {
-    var loginIcon = `fa ${this.state.loggingIn ? 'fa-circle-o-notch fa-spin' : 'fa-sign-in'}`;
+    const loginIcon = `fa ${this.state.loggingIn ? 'fa-circle-o-notch fa-spin' : 'fa-sign-in'}`;
 
     return (
       <div className="login">
@@ -93,7 +90,7 @@ export default class Login extends React.Component {
             <label className="sr-only" htmlFor="username">Username</label>
             <input className="form-control" autoCapitalize={false}
               ref="username" placeholder="Username" autoFocus
-              onChange={(event)=> {this.state.username = event.target.value}}
+              onChange={(event)=> {this.state.username = event.target.value;}}
             />
           </div>
 
@@ -101,7 +98,7 @@ export default class Login extends React.Component {
             <label className="sr-only" htmlFor="password">Password</label>
             <input className="form-control" type="password"
               ref="password" placeholder="Password"
-              onChange={(event)=> {this.state.password = event.target.value}}
+              onChange={(event)=> {this.state.password = event.target.value;}}
             />
           </div>
 

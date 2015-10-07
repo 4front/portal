@@ -1,9 +1,16 @@
 import React from 'react';
+import debug from 'react-debug';
 import Login from './Login';
 import OrgHome from './OrgHome';
+import OrgMembers from './OrgMembers';
 import MainLayout from './MainLayout';
-import { Router, Route, IndexRoute, Redirect } from 'react-router';
-import { createHistory, useBasename } from 'history'
+import OrgLayout from './OrgLayout';
+import AppLayout from './AppLayout';
+import AppSettings from './AppSettings';
+import Deployments from './Deployments';
+import AccessDenied from './AccessDenied';
+import { Router, Route, IndexRoute } from 'react-router';
+import { createHistory, useBasename } from 'history';
 import globalState from '../lib/global-state';
 
 Object.assign(globalState, window.__config__);
@@ -28,26 +35,27 @@ Shell.propTypes = {
 
 const requireAuth = (nextState, replaceState) => {
   if (!globalState.user) {
-    console.warn("user not logged in, redirect to /login");
+    debug('user not logged in, redirect to /login');
     replaceState({ nextPathname: nextState.location.pathname }, '/portal/login');
   }
-  // else if (nextState.location.pathname === '/') {
-  //   replaceState({ nextPathname: nextState.location.pathname }, '/portal/');
-  // }
 };
 
-// function gotoDefaultView(nextState, replaceState) {
-//   replaceState({ nextPathname: nextState.location.pathname }, '/views/preview');
-// }
-
-var routes = (
+const routes = (
   <Route component={Shell}>
     <Route path="/login" component={Login} />
+    <Route path="/access-denied" component={AccessDenied}/>
     <Route component={MainLayout} onEnter={requireAuth}>
-      <Route path="/" component={OrgHome} />
-      <Route path="orgs/:orgId" component={OrgHome} org={globalState.currentOrg}/>
+      <Route component={OrgLayout}>
+        <Route path="/orgs/:orgId" component={OrgHome}/>
+        <Route path="orgs/:orgId/members" component={OrgMembers}/>
+      </Route>
+      <Route path="/apps/:appId" component={AppLayout} mode="app">
+        <IndexRoute component={Deployments}/>
+        <Route path="/apps/:appId/settings" component={AppSettings}/>
+      </Route>
     </Route>
   </Route>
 );
+
 
 React.render(<Router history={HISTORY}>{routes}</Router>, document.body);

@@ -1,8 +1,10 @@
 import React from 'react';
+import debug from 'react-debug';
 import {Link} from 'react-router';
 import Sidebar from './Sidebar';
 import NewOrganization from './NewOrganization';
-import request from '../lib/request';
+import request from 'superagent';
+// import request from '../lib/request';
 import globalState from '../lib/global-state';
 import dispatcher from '../lib/dispatcher';
 
@@ -23,40 +25,56 @@ export default class MainLayout extends React.Component {
       });
     });
 
+    debug(MainLayout, 'loading orgs');
     request.get('/api/profile/orgs')
       .set('X-Access-Token', globalState.user.jwt.token)
-      .then((res) => {
-        console.debug('retrieved orgs');
-        globalState.orgs = res.body;
+      .end((err, resp) => {
+        if (err) {
+          return this.setState({
+            loading: false,
+            error: err
+          });
+        }
+
+        globalState.orgs = resp.body;
+
+        if (globalState.orgs.length === 0) {
+          return this.context.history.replaceState(null, '/create-org');
+        }
+
+        if (this.props.location.pathname === '/') {
+          const redirectPath = `/orgs/${globalState.orgs[0].orgId}`;
+          debug(MainLayout, `redirecting to ${redirectPath}`);
+
+          // Don't use a return statement here so the setState below still fires
+          this.context.history.replaceState(null, redirectPath);
+        }
 
         this.setState({
-          orgs: globalState.orgs,
-          loading: false
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        this.setState({
           loading: false,
-          error: err
+          orgs: globalState.orgs
         });
       });
   }
 
   renderChildren() {
     // If there are no organizations, render the new org screen
-    if (this.state.orgs.length === 0)
+    if (this.state.orgs.length === 0) {
       return <NewOrganization/>;
+    }
 
     return this.props.children;
   }
 
   render() {
-    if (this.state.loading === true)
+    // debugger;
+    if (this.state.loading === true) {
       return <h2>Loading..</h2>;
+    }
 
-    if (this.error)
+    if (this.state.error) {
       return <div>{this.state.error.toString()}</div>;
+    }
 
     return (
       <div>
@@ -64,7 +82,7 @@ export default class MainLayout extends React.Component {
           <div className="container-fluid">
             <div className="navbar-header">
               <Link to="/" className="navbar-brand">
-                <img src="//s3-us-west-2.amazonaws.com/4front-media/4front-logo.png" alt='4front'/>
+                <img src="//s3-us-west-2.amazonaws.com/4front-media/4front-logo.png" alt="4front"/>
               </Link>
             </div>
             <div className="navbar-collapse collapse">
@@ -90,6 +108,14 @@ export default class MainLayout extends React.Component {
   }
 }
 
+MainLayout.displayName = 'MainLayout';
+
 MainLayout.propTypes = {
-  children: React.PropTypes.any
+  children: React.PropTypes.any,
+  params: React.PropTypes.object,
+  location: React.PropTypes.object
+};
+
+MainLayout.contextTypes = {
+  history: React.PropTypes.object
 };

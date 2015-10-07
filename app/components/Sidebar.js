@@ -8,8 +8,7 @@ export default class Sidebar extends React.Component {
   renderOrgLink(org) {
     return (
       <li key={org.orgId}>
-        <Link to={`/orgs/${org.orgId}`}
-          className={org === this.props.currentOrg ? 'active' : ''}>
+        <Link to={`/orgs/${org.orgId}`} activeClassName="active">
           {org.name}
         </Link>
       </li>

@@ -1,1 +1,3 @@
-../../eslint-config/react/.eslintrc
+{
+  "extends": "4front/react"
+}
