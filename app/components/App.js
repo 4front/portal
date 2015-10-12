@@ -45,6 +45,7 @@ const routes = (
     <Route path="/login" component={Login} />
     <Route path="/access-denied" component={AccessDenied}/>
     <Route component={MainLayout} onEnter={requireAuth}>
+      <Route path="/"/>
       <Route component={OrgLayout}>
         <Route path="/orgs/:orgId" component={OrgHome}/>
         <Route path="orgs/:orgId/members" component={OrgMembers}/>

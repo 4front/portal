@@ -38,20 +38,31 @@ export default class AppLayout extends React.Component {
       .end((err, resp) => {
         if (err) {
           if (resp.body.code === 'appNotFound') {
-            this.setState({
+            return this.setState({
               accessDenied: true,
               loading: false
             });
-          } else {
-            return this.setState({
-              error: err,
-              loading: false
-            });
           }
+
+          return this.setState({
+            error: err,
+            loading: false
+          });
+        }
+
+        // Make sure the user has access to the parent organization of the app.
+        const app = resp.body;
+        const parentOrg = globalState.orgs.find(org => org.orgId === app.orgId);
+        if (!parentOrg) {
+          return this.setState({
+            accessDenied: true,
+            loading: false
+          });
         }
 
         this.setState({
-          app: resp.body,
+          app: app,
+          parentOrg: parentOrg,
           accessDenied: false,
           loading: false
         });
@@ -77,18 +88,28 @@ export default class AppLayout extends React.Component {
     if (this.state.accessDenied) return <AccessDenied/>;
 
     return (
-      <section>
-        <nav className="navbar navbar-default">
-          <div className="container-fluid">
-            <ul className="nav navbar-nav">
-              {MENU_ITEMS.map(this.renderMenuItem.bind(this))}
-            </ul>
+      <div>
+        <nav className="navbar primary">
+          <div className="row">
+            <div className="col-md-6">
+              <h1>{this.state.parentOrg.name}</h1> / <h1>{this.state.app.name}</h1>
+            </div>
+            <div className="col-md-6">
+              <div className="pull-right">
+                <a href="/portal/logout">Logout</a>
+              </div>
+            </div>
           </div>
+        </nav>
+        <nav className="navbar secondary">
+          <ul>
+            {MENU_ITEMS.map(this.renderMenuItem.bind(this))}
+          </ul>
         </nav>
         <section className="main-content">
           {this.renderChildren()}
         </section>
-      </section>
+      </div>
     );
   }
 }

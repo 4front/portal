@@ -43,7 +43,7 @@ export default class MainLayout extends React.Component {
         }
 
         if (this.props.location.pathname === '/') {
-          const redirectPath = `/orgs/${globalState.orgs[0].orgId}`;
+          const redirectPath = `/orgs/${globalState.orgs[0].orgId}/`;
           debug(MainLayout, `redirecting to ${redirectPath}`);
 
           // Don't use a return statement here so the setState below still fires
@@ -77,33 +77,19 @@ export default class MainLayout extends React.Component {
     }
 
     return (
-      <div>
-        <nav className="nav navbar navbar-inverse navbar-fixed-top">
-          <div className="container-fluid">
-            <div className="navbar-header">
-              <Link to="/" className="navbar-brand">
-                <img src="//s3-us-west-2.amazonaws.com/4front-media/4front-logo.png" alt="4front"/>
-              </Link>
-            </div>
-            <div className="navbar-collapse collapse">
-              <ul className="nav navbar-nav navbar-right" style={{marginRight: 0}}>
-                <li><Link to="/">Dashboard</Link></li>
-                <li><a href="/portal/logout">Logout</a></li>
-              </ul>
-            </div>
+      <section className="container-fluid">
+        <div className="row">
+          <div className="col-sm-3 col-md-2 sidebar">
+            <Link to="/" className="logo">
+              <img src="//s3-us-west-2.amazonaws.com/4front-media/4front-logo.png" alt="4front"/>
+            </Link>
+            <Sidebar {...this.state}/>
           </div>
-        </nav>
-        <section className="container-fluid">
-          <div className="row">
-            <div className="col-sm-3 col-md-2 sidebar">
-              <Sidebar {...this.state}/>
-            </div>
-            <div className="col-sm-9 col-ms-offset-3 col-md-10 col-md-offset-2 main">
-              {this.renderChildren()}
-            </div>
+          <div className="col-sm-9 col-ms-offset-3 col-md-10 col-md-offset-2 main">
+            {this.renderChildren()}
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     );
   }
 }

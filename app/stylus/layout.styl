@@ -1,28 +1,63 @@
-body
-  padding-top 50px
-
-.sub-header
-  padding-bottom 10px
-  border-bottom 1px solid #eee
+// body
+//   padding-top 50px
 
 .navbar
   border-radius: 0
   background-color: #f8f8f8
+  border-bottom 1px solid #eee
+  padding: 0 30px
+  height: 50px
+  margin-bottom: 0
+  min-height: auto
 
-a.navbar-brand
-  img
-    height: 30px
+.navbar.primary
+  position: fixed
+  top: 0
+  right: 0
+  left: 16.66666667%;
 
-.navbar-fixed-top
-  border: 0
+  h1
+    margin: 0
+    line-height: 50px
+    font-size: 24px
+    display: inline-block
+
+  div
+    line-height: 50px
+
+.navbar.secondary
+  margin-top: 50px
+
+  ul
+    padding: 0
+    margin: 0
+    list-style: none
+
+    li
+      line-height: 49px
+      display: inline-block
+
+      a
+        display: inline-block
+        padding: 0 10px
+
+      a:hover
+        background-color: #eee
+
+      a.active
+        background-color: #eee
+        border-bottom-color: #333
 
 .sidebar
   display: none
 
+  .logo img
+    height: 44px
+
 @media(min-width:768px)
   .sidebar
     position fixed
-    top 51px
+    top 0
     bottom 0
     left 0
     z-index 1000
@@ -73,3 +108,15 @@ section.main-content {
   padding: 30px
   padding-bottom: 60px
 }
+
+section.login
+  padding-top: 40px;
+  width: 300px;
+  margin: 0 auto;
+
+  .logo
+    text-align: center;
+    margin-bottom: 20px;
+
+    img
+      height: 50px

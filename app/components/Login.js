@@ -2,7 +2,7 @@ import React from 'react';
 import Alert from './Alert';
 import {Router} from 'react-router';
 import globalState from '../lib/global-state';
-import request from '../lib/request';
+import request from 'superagent';
 
 const LOGO_IMAGE = 'https://s3-us-west-2.amazonaws.com/4front-media/4front-logo.png';
 
@@ -27,33 +27,36 @@ export default class Login extends React.Component {
     const username = this.refs.username.getDOMNode().value;
     const password = this.refs.password.getDOMNode().value;
 
+    const history = this.context.history;
+
     request.post('/portal/login')
       .send({
         username: username,
         password: password
       })
-      .then((res) => {
-        globalState.user = res.body;
+      .end((err, resp) => {
+        if (err) {
+          let errorCode;
+          if (resp.body) {
+            errorCode = resp.body.code;
+          } else {
+            errorCode = 'unknown';
+          }
+
+          return this.setState({
+            errorCode: errorCode,
+            loggingIn: false
+          });
+        }
+
+        globalState.user = resp.body;
 
         // Redirect to whatever URL the user was originally trying to access
         if (this.props.location.state && this.props.location.state.nextPathname) {
-          this.context.history.replaceState(null, location.state.nextPathname);
+          history.replaceState(null, this.props.location.state.nextPathname);
         } else {
-          this.context.history.replaceState(null, '/');
+          history.replaceState(null, '/');
         }
-      })
-      .catch((err) => {
-        let errorCode;
-        if (err.response && err.response.body) {
-          errorCode = err.response.body.code;
-        } else {
-          errorCode = 'unknown';
-        }
-
-        this.setState({
-          errorCode: errorCode,
-          loggingIn: false
-        });
       });
   }
 
@@ -80,7 +83,7 @@ export default class Login extends React.Component {
     const loginIcon = `fa ${this.state.loggingIn ? 'fa-circle-o-notch fa-spin' : 'fa-sign-in'}`;
 
     return (
-      <div className="login">
+      <section className="login">
         <div className="logo">
           <img src={LOGO_IMAGE}/>
         </div>
@@ -109,7 +112,7 @@ export default class Login extends React.Component {
             </button>
           </div>
         </form>
-      </div>
+      </section>
     );
   }
 }

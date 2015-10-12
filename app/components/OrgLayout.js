@@ -52,18 +52,28 @@ export default class OrgLayout extends React.Component {
     if (this.state.accessDenied) return <AccessDenied/>;
 
     return (
-      <section>
-        <nav className="navbar navbar-default">
-          <div className="container-fluid">
-            <ul className="nav navbar-nav">
-              {MENU_ITEMS.map(this.renderMenuItem.bind(this))}
-            </ul>
+      <div>
+        <nav className="navbar primary">
+          <div className="row">
+            <div className="col-md-6">
+              <h1>{this.state.org.name}</h1>
+            </div>
+            <div className="col-md-6">
+              <div className="pull-right">
+                <a href="/portal/logout">Logout</a>
+              </div>
+            </div>
           </div>
+        </nav>
+        <nav className="navbar secondary">
+          <ul>
+            {MENU_ITEMS.map(this.renderMenuItem.bind(this))}
+          </ul>
         </nav>
         <section className="main-content">
           {this.renderChildren()}
         </section>
-      </section>
+      </div>
     );
   }
 }

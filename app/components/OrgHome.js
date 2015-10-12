@@ -74,7 +74,7 @@ export default class OrgHome extends React.Component {
   renderAppRow(app) {
     return (
       <tr key={app.appId}>
-        <td><Link to={`/apps/${app.appId}`}>{app.name}</Link></td>
+        <td><Link to={`/apps/${app.appId}/`}>{app.name}</Link></td>
         <td>{app.url}</td>
       </tr>
     );
